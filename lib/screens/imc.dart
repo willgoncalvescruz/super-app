@@ -2,23 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 
-/* void main() {
-  runApp(MaterialApp(
-    home: SplashScreenHomeImc(),
-  ));
-} */
-
 class SplashScreenHomeImc extends StatelessWidget {
   const SplashScreenHomeImc({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget example1 = SplashScreenView(
+    Widget home = SplashScreenView(
       navigateRoute: const Home(),
       duration: 3000,
       imageSize: 130,
-      imageSrc: "background1.png",
-      text: "Splash Screen IMC",
+      imageSrc: "assets/images/imc.png",
+      text: "IMC",
       textType: TextType.ColorizeAnimationText,
       textStyle: const TextStyle(
         fontSize: 40.0,
@@ -29,12 +23,12 @@ class SplashScreenHomeImc extends StatelessWidget {
         Colors.yellow,
         Colors.red,
       ],
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[700],
     );
 
     return MaterialApp(
-      title: 'Splash screen Demo IMC',
-      home: example1,
+      title: 'IMC',
+      home: home,
     );
   }
 }

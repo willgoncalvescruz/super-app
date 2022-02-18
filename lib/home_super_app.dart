@@ -31,7 +31,7 @@ class SecondCategory extends StatelessWidget {
   //const SecondCategory({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return const Text("Segunda Página");
+    return const Text("");
   }
 }
 
@@ -53,9 +53,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // ignore: prefer_final_fields
   List<FeatureTestItem> _elements = [
-    FeatureTestItem(
-        'SplashScreenHomeImc', 'SplashScreenHomeImc', '/SplashScreenHomeImc'),
-    FeatureTestItem('SplashScreenHomeConversor', 'SplashScreenHomeConversor',
+    FeatureTestItem('App-Imc', 'SplashScreenHomeImc', '/SplashScreenHomeImc'),
+    FeatureTestItem('App-Conversor', 'SplashScreenHomeConversor',
         '/SplashScreenHomeConversor'),
   ];
 
@@ -63,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home - Mobile"),
+        title: const Text("Home - SuperApps"),
         centerTitle: true,
         backgroundColor: Colors.blue[800],
       ),
@@ -117,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(imageSize / 2),
         child: Image.asset(
-          "assets/apps.png",
+          "assets/images/apps.png",
           fit: BoxFit.contain,
           alignment: Alignment.center,
         ),

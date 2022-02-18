@@ -13,12 +13,12 @@ class SplashScreenHomeConversor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget example1 = SplashScreenView(
+    Widget home = SplashScreenView(
       navigateRoute: const Home(),
       duration: 3000,
       imageSize: 130,
-      imageSrc: "background.png",
-      text: "Splash Screen CONVERSOR",
+      imageSrc: "assets/images/conversor.png",
+      text: "CONVERSOR DE MOEDA",
       textType: TextType.ColorizeAnimationText,
       textStyle: const TextStyle(
         fontSize: 40.0,
@@ -33,8 +33,8 @@ class SplashScreenHomeConversor extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'Splash screen Demo CONVERSOR',
-      home: example1,
+      title: 'CONVERSOR DE MOEDAS',
+      home: home,
     );
   }
 }
