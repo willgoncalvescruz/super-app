@@ -25,14 +25,16 @@
 ## Experiencia
 Achei muito interessante o curso, aborda de forma ampla muitas ferramentas  e tecnicas de desenvolvimento e bases como (instalação, funções, lógica, herança, uso de api, componentização, reaproveitamento de código, arquitetura e muito mais), tudo foi muito bem explorado com ótima metodologia passo a passo, recomendo a todos as aulas do <a href="https://www.startto.dev/">Daniel Ciolf - Startto.dev</a>
 ### Features
-- [x] App - Indice de massa corporal
-- [x] App - Conversor de moédas
+- [x] 1 - App - Indice de massa corporal
+- [x] 2 - App - Conversor de moédas
+- [x] 3 - App - Lista de Tarefas
 
 ### Rodar
 - [x] Fazer Clone do Projeto: git clone https://github.com/willgoncalvescruz/super-app.git
 - [x] Acessar diretório: cd super_app
 - [x] Baixar dependencias: flutter pub get
-- [x] Fazer Build: flutter run
+- [x] Fazer Build: flutter run / * Para rodar sem null-safety: flutter run --no-sound-null-safety
+
 
 ### Telas
 <h1 align="center">
