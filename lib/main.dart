@@ -14,12 +14,3 @@ void main() async {
     home: const HomeSuperApps(),
   ));
 }
-
-/* var request =
-    Uri.parse("http://api.hgbrasil.com/finance?format=json%key=60df7606");
-
-Future<Map> getData() async {
-  http.Response response = await http.get(request);
-  return json.decode(response.body);
-}
- */

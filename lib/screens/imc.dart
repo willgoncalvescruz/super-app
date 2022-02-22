@@ -95,87 +95,91 @@ class _HomeState extends State<Home> {
         ],
       ),
       //backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-        child: Form(
-          key: _formKey,
-          child: LayoutBuilder(
-            builder: (_, constraints) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  const Icon(Icons.person_outline,
-                      size: 120.0, color: Colors.deepPurple),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        labelText: "Peso (kg)",
-                        labelStyle: TextStyle(color: Colors.deepPurple)),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: Colors.deepPurple, fontSize: 25.0),
-                    controller: weightController,
-                    // ignore: missing_return
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Insira seu Peso!";
-                      }
-                    },
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        labelText: "Altura (cm)",
-                        labelStyle: TextStyle(color: Colors.deepPurple)),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: Colors.deepPurple, fontSize: 25.0),
-                    controller: heightController,
-                    // ignore: missing_return
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Insira sua Altura!";
-                      }
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: constraints.maxWidth,
-                      height: 200,
-                      color: Colors.transparent,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _calculate();
-                          }
-                        },
-                        child: const Text(
-                          "Calcular",
-                          style: TextStyle(color: Colors.white, fontSize: 25.0),
-                        ),
-                        //color: Colors.deepPurple,
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple,
-                          onPrimary: Colors.white,
-                          shadowColor: Colors.black,
-                          textStyle: textStyle16White,
-                          enableFeedback: true,
-                          elevation: 1,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+          child: Form(
+            key: _formKey,
+            child: LayoutBuilder(
+              builder: (_, constraints) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    const Icon(Icons.person_outline,
+                        size: 120.0, color: Colors.deepPurple),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                          labelText: "Peso (kg)",
+                          labelStyle: TextStyle(color: Colors.deepPurple)),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.deepPurple, fontSize: 25.0),
+                      controller: weightController,
+                      // ignore: missing_return
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Insira seu Peso!";
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                          labelText: "Altura (cm)",
+                          labelStyle: TextStyle(color: Colors.deepPurple)),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.deepPurple, fontSize: 25.0),
+                      controller: heightController,
+                      // ignore: missing_return
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Insira sua Altura!";
+                        }
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: constraints.maxWidth,
+                        height: 200,
+                        color: Colors.transparent,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _calculate();
+                            }
+                          },
+                          child: const Text(
+                            "Calcular",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 25.0),
+                          ),
+                          //color: Colors.deepPurple,
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.deepPurple,
+                            onPrimary: Colors.white,
+                            shadowColor: Colors.black,
+                            textStyle: textStyle16White,
+                            enableFeedback: true,
+                            elevation: 1,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Text(
-                    _infoText,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: Colors.deepPurple, fontSize: 25.0),
-                  )
-                ],
-              );
-            },
+                    Text(
+                      _infoText,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.deepPurple, fontSize: 25.0),
+                    )
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

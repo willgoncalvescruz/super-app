@@ -19,14 +19,14 @@
 
 ## Descrição
 <p align="center">O SuperApp partiu da ideia de tratar de forma eficiente a aprendizagem durante o curso do Daniel Ciolf sobre flutter onde são desenvolvidos aproximadamente 30 apps, ao invez de criar vários do zero agreguei um painel de cards com rotas para cada app  =>
-<a href="https://www.startto.dev/">Startto.DEV</a>
+<a href="https://www.startto.dev/">Startto.dev</a>
  </p>
 
 ## Experiencia
-Achei muito interessante o curso, aborda de forma ampla muitas ferramentas  e tecnicas de desenvolvimento e bases como (instalação, funções, lógica, herança, uso de api, componentização, reaproveitamento de código, arquitetura e muito mais), tudo foi muito bem explorado com ótima metodologia passo a passo, recomendo a todos as aulas do <a href="https://www.startto.dev/">Daniel Ciolf - Startto.DEV</a>
+Achei muito interessante o curso, aborda de forma ampla muitas ferramentas  e tecnicas de desenvolvimento e bases como (instalação, funções, lógica, herança, uso de api, componentização, reaproveitamento de código, arquitetura e muito mais), tudo foi muito bem explorado com ótima metodologia passo a passo, recomendo a todos as aulas do <a href="https://www.startto.dev/">Daniel Ciolf - Startto.dev</a>
 ### Features
 - [x] App - Indice de massa corporal
-- [x] App -Conversor de moédas
+- [x] App - Conversor de moédas
 
 ### Rodar
 - [x] Fazer Clone do Projeto: git clone https://github.com/willgoncalvescruz/super-app.git

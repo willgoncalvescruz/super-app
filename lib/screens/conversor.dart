@@ -145,12 +145,20 @@ class _HomeState extends State<Home> {
               case ConnectionState.none:
                 return const Text('Aperte o botão para Iniciar');
               case ConnectionState.waiting:
-                return const Center(
-                    child: Text(
-                  'Carregando dados',
-                  style: TextStyle(color: Colors.blue, fontSize: 25),
-                  textAlign: TextAlign.center,
-                ));
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 100),
+                      Text(
+                        'Carregando dados',
+                        style: TextStyle(color: Colors.blue, fontSize: 25),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                );
 
               default:
                 if (snapshot.hasError) {

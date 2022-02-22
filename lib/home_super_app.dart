@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:super_app/screens/conversor.dart';
 import 'package:super_app/screens/imc.dart';
-/* 
-void main() {
-  runApp(HomeSuperApps());
-} */
+import 'package:super_app/screens/lista.dart';
 
 class HomeSuperApps extends StatelessWidget {
   const HomeSuperApps({Key? key}) : super(key: key);
@@ -20,6 +17,8 @@ class HomeSuperApps extends StatelessWidget {
         '/SplashScreenHomeImc': (context) => const SplashScreenHomeImc(),
         '/SplashScreenHomeConversor': (context) =>
             const SplashScreenHomeConversor(),
+        '/SplashScreenListaTarefas': (context) =>
+            const SplashScreenListaTarefas(),
       },
     );
   }
@@ -53,9 +52,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // ignore: prefer_final_fields
   List<FeatureTestItem> _elements = [
-    FeatureTestItem('App-Imc', 'SplashScreenHomeImc', '/SplashScreenHomeImc'),
-    FeatureTestItem('App-Conversor', 'SplashScreenHomeConversor',
-        '/SplashScreenHomeConversor'),
+    FeatureTestItem('App-Imc', '1', '/SplashScreenHomeImc'),
+    FeatureTestItem('App-Conversor', '2', '/SplashScreenHomeConversor'),
+    FeatureTestItem('App-Lista', '3', '/SplashScreenListaTarefas'),
   ];
 
   @override
@@ -72,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
         groupComparator: (value1, value2) => value2.compareTo(value1),
         itemComparator: (item1, item2) =>
             item1.featureName.compareTo(item2.featureName),
-        order: GroupedListOrder.ASC,
+        order: GroupedListOrder.DESC,
         useStickyGroupSeparators: false,
         groupSeparatorBuilder: (String value) => Padding(
           padding: const EdgeInsets.all(4.0),
