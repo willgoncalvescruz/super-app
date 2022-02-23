@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 
-class SplashScreenListaTarefas extends StatelessWidget {
-  const SplashScreenListaTarefas({Key? key}) : super(key: key);
+class SplashScreenBuscadorGIFs extends StatelessWidget {
+  const SplashScreenBuscadorGIFs({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +16,8 @@ class SplashScreenListaTarefas extends StatelessWidget {
       navigateRoute: const Home(),
       duration: 3000,
       imageSize: 130,
-      imageSrc: "assets/images/lista.png",
-      text: "LISTA DE TAREFAS",
+      imageSrc: "assets/images/gif.png",
+      text: "BUSCADOR DE GIFS",
       textType: TextType.ColorizeAnimationText,
       textStyle: const TextStyle(
         fontSize: 40.0,
@@ -32,7 +32,7 @@ class SplashScreenListaTarefas extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'LISTA DE TAREFAS',
+      title: 'BUSCADOR DE GIFS',
       home: home,
       theme: ThemeData(
           hintColor: Colors.amber,
@@ -66,10 +66,6 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  void _clearAll() {
-    _toDoController.text = "";
-  }
-
   List _toDoList = [];
 
   late Map<String, dynamic> _lastRemoved;
@@ -88,12 +84,10 @@ class _HomeState extends State<Home> {
 
   void _addToDo() {
     if (_toDoController.text.isEmpty) {
-      setState(() {
-        _validate = true;
-      });
+      _validate = true;
     } else {
+      _validate = false;
       setState(() {
-        _validate = false;
         Map<String, dynamic> newToDo = {};
         newToDo["title"] = _toDoController.text;
         _toDoController.text = "";
@@ -128,7 +122,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Lista de Tarefas"),
+          title: const Text("Buscador de Gifs"),
           backgroundColor: Colors.blueAccent,
           centerTitle: true,
           actions: <Widget>[
@@ -136,44 +130,25 @@ class _HomeState extends State<Home> {
               icon: const Icon(Icons.reorder),
               tooltip: 'Reordenar',
               onPressed: _refresh,
-            ),
+            )
           ]),
       body: Column(
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.fromLTRB(15.0, 1.0, 7.0, 1.0),
+            padding: const EdgeInsets.fromLTRB(17.0, 1.0, 7.0, 1.0),
             child: Row(
               children: <Widget>[
                 Expanded(
                     child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    right: 15,
-                  ),
+                  padding: const EdgeInsets.all(15.0),
                   child: TextField(
                     controller: _toDoController,
                     decoration: InputDecoration(
-                      //hintText: 'Enter Something',
-                      //focusColor: Colors.green,
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.refresh),
-                        onPressed: _clearAll,
-                      ),
-                      labelText: "Escreva aqui sua tarefa",
-                      errorText: _validate ? 'Escreva alguma tarefa!' : null,
-                      labelStyle: const TextStyle(
-                        color: Colors.blueAccent,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 3, color: Colors.blue),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              width: 2, color: Colors.blueAccent),
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
+                        labelText: "Digite sua Tarefa",
+                        errorText: _validate ? 'Digite alguma tarefa' : null,
+                        labelStyle: const TextStyle(
+                          color: Colors.blueAccent,
+                        )),
                   ),
                 )),
                 ElevatedButton(
@@ -247,7 +222,7 @@ class _HomeState extends State<Home> {
                     _saveData();
                   });
                 }),
-            duration: const Duration(seconds: 3),
+            duration: const Duration(seconds: 2),
           );
 
           ScaffoldMessenger.of(context).removeCurrentSnackBar();

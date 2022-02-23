@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:super_app/screens/buscadorgifs.dart';
 import 'package:super_app/screens/conversor.dart';
 import 'package:super_app/screens/imc.dart';
 import 'package:super_app/screens/lista.dart';
@@ -19,6 +20,8 @@ class HomeSuperApps extends StatelessWidget {
             const SplashScreenHomeConversor(),
         '/SplashScreenListaTarefas': (context) =>
             const SplashScreenListaTarefas(),
+        '/SplashScreenBuscadorGIFs': (context) =>
+            const SplashScreenBuscadorGIFs(),
       },
     );
   }
@@ -55,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     FeatureTestItem('App-Imc', '1', '/SplashScreenHomeImc'),
     FeatureTestItem('App-Conversor', '2', '/SplashScreenHomeConversor'),
     FeatureTestItem('App-Lista', '3', '/SplashScreenListaTarefas'),
+    FeatureTestItem('App-Gifs', '4', '/SplashScreenBuscadorGIFs'),
   ];
 
   @override
