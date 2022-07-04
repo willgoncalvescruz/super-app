@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
+//import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
+//import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
 import 'package:super_app/screens/buscadorgifs.dart';
 import 'package:super_app/screens/conversor.dart';
 import 'package:super_app/screens/imc.dart';
 import 'package:super_app/screens/lista.dart';
+import 'package:super_app/screens/testeresponsivo.dart';
 
 class HomeSuperApps extends StatelessWidget {
   const HomeSuperApps({Key? key}) : super(key: key);
@@ -22,6 +25,9 @@ class HomeSuperApps extends StatelessWidget {
             const SplashScreenListaTarefas(),
         '/SplashScreenBuscadorGIFs': (context) =>
             const SplashScreenBuscadorGIFs(),
+        /* '/SplashScreenHomeAgendaContatos': (context) =>
+            const SplashScreenHomeAgendaContatos(), */
+        '/TesteResponsivo': (context) => const TesteResponsivo(),
       },
     );
   }
@@ -59,6 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
     FeatureTestItem('App-Conversor', '2', '/SplashScreenHomeConversor'),
     FeatureTestItem('App-Lista', '3', '/SplashScreenListaTarefas'),
     FeatureTestItem('App-Gifs', '4', '/SplashScreenBuscadorGIFs'),
+    FeatureTestItem(
+        'App-Agenda-Contatos', '5', '/SplashScreenHomeAgendaContatos'),
+    FeatureTestItem('Teste-Responviso', '6', '/TesteResponsivo'),
   ];
 
   @override

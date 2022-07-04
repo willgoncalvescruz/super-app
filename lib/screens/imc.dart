@@ -122,6 +122,7 @@ class _HomeState extends State<Home> {
                         if (value!.isEmpty) {
                           return "Insira seu Peso!";
                         }
+                        return null;
                       },
                     ),
                     TextFormField(
@@ -138,6 +139,7 @@ class _HomeState extends State<Home> {
                         if (value!.isEmpty) {
                           return "Insira sua Altura!";
                         }
+                        return null;
                       },
                     ),
                     Padding(

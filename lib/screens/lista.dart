@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:path_provider/path_provider.dart';
+// ignore: import_of_legacy_library_into_null_safe
+//import 'package:path_provider/path_provider.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 
 class SplashScreenListaTarefas extends StatelessWidget {

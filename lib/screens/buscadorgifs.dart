@@ -1,11 +1,12 @@
-import 'dart:async';
+import 'dart:async' show Future;
 import 'dart:convert';
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
+import 'package:flutter_share/flutter_share.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class SplashScreenBuscadorGIFs extends StatelessWidget {
   const SplashScreenBuscadorGIFs({Key? key}) : super(key: key);
@@ -44,7 +45,6 @@ class SplashScreenBuscadorGIFs extends StatelessWidget {
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
             hintStyle: TextStyle(color: Colors.white),
           )),
-      //
     );
   }
 }
@@ -57,200 +57,194 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final _toDoController = TextEditingController();
-  bool _validate = false;
+  late String _search;
+  int _offset = 0;
 
-  @override
-  void dispose() {
-    _toDoController.dispose();
-    super.dispose();
+  Future<Map> _getGifs() async {
+    http.Response response;
+
+    if (_search.isEmpty) {
+      response = await http.get(Uri.parse(
+          'https://api.giphy.com/v1/gifs/trending?api_key=wusbFwUExpkztfjeMr3QRimPUc4kd1J9&limit=5&rating=G'));
+    } else {
+      response = await http.get(Uri.parse(
+          'https://api.giphy.com/v1/gifs/search?api_key=wusbFwUExpkztfjeMr3QRimPUc4kd1J9&q=$_search&limit=5&offset=$_offset&rating=G&lang=en'));
+    }
+    return json.decode(response.body);
   }
-
-  List _toDoList = [];
-
-  late Map<String, dynamic> _lastRemoved;
-  late int _lastRemovedPos;
 
   @override
   void initState() {
     super.initState();
 
-    _readData().then((data) {
-      setState(() {
-        _toDoList = json.decode(data!);
-      });
+    _getGifs().then((map) {
+      if (kDebugMode) {
+        print(map);
+      }
     });
-  }
-
-  void _addToDo() {
-    if (_toDoController.text.isEmpty) {
-      _validate = true;
-    } else {
-      _validate = false;
-      setState(() {
-        Map<String, dynamic> newToDo = {};
-        newToDo["title"] = _toDoController.text;
-        _toDoController.text = "";
-        newToDo["ok"] = false;
-        _toDoList.add(newToDo);
-        _saveData();
-      });
-    }
-  }
-
-  Future<void> _refresh() async {
-    await Future.delayed(const Duration(seconds: 1));
-
-    setState(() {
-      _toDoList.sort((a, b) {
-        if (a["ok"] && !b["ok"]) {
-          return 1;
-        } else if (!a["ok"] && b["ok"]) {
-          return -1;
-        } else {
-          return 0;
-        }
-      });
-
-      _saveData();
-    });
-
-    return;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Buscador de Gifs"),
-          backgroundColor: Colors.blueAccent,
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.reorder),
-              tooltip: 'Reordenar',
-              onPressed: _refresh,
-            )
-          ]),
+        backgroundColor: Colors.black,
+        title: Image.network(
+            "https://developers.giphy.com/branch/master/static/header-logo-0fec0225d189bc0eae27dac3e3770582.gif"),
+        centerTitle: true,
+      ),
+      backgroundColor: Colors.black,
       body: Column(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(17.0, 1.0, 7.0, 1.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: TextField(
-                    controller: _toDoController,
-                    decoration: InputDecoration(
-                        labelText: "Digite sua Tarefa",
-                        errorText: _validate ? 'Digite alguma tarefa' : null,
-                        labelStyle: const TextStyle(
-                          color: Colors.blueAccent,
-                        )),
-                  ),
-                )),
-                ElevatedButton(
-                  child: const Text("ADICIONAR"),
-                  onPressed: _addToDo,
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue[900],
-                    onPrimary: Colors.white,
-                    side: const BorderSide(color: Colors.blue, width: 3),
-                  ),
-                )
-              ],
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              decoration: const InputDecoration(
+                  labelText: "Pesquise Aqui!",
+                  labelStyle: TextStyle(color: Colors.white),
+                  border: OutlineInputBorder()),
+              style: const TextStyle(color: Colors.white, fontSize: 18.0),
+              textAlign: TextAlign.center,
+              onSubmitted: (text) {
+                setState(() {
+                  _search = text;
+                  _offset = 0;
+                });
+              },
             ),
           ),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: _refresh,
-              child: ListView.builder(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  itemCount: _toDoList.length,
-                  itemBuilder: buildItem),
-            ),
-          )
+            child: FutureBuilder(
+                future: _getGifs(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                      return Container(
+                        width: 200.0,
+                        height: 200.0,
+                        alignment: Alignment.center,
+                        child: const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          strokeWidth: 5.0,
+                        ),
+                      );
+                    default:
+                      if (snapshot.hasError) {
+                        return Container();
+                      } else {
+                        return _createGifTable(context, snapshot);
+                      }
+                  }
+                }),
+          ),
         ],
       ),
     );
   }
 
-  Widget buildItem(BuildContext context, int index) {
-    return Dismissible(
-      key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
-      background: Container(
-        color: Colors.red,
-        child: const Align(
-          alignment: Alignment(-0.9, 0.0),
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      direction: DismissDirection.startToEnd,
-      child: CheckboxListTile(
-        title: Text(_toDoList[index]["title"]),
-        value: _toDoList[index]["ok"],
-        secondary: CircleAvatar(
-          child: Icon(_toDoList[index]["ok"] ? Icons.check : Icons.error),
-        ),
-        onChanged: (c) {
-          setState(() {
-            _toDoList[index]["ok"] = c;
-            _saveData();
-          });
-        },
-      ),
-      onDismissed: (direction) {
-        setState(() {
-          _lastRemoved = Map.from(_toDoList[index]);
-          _lastRemovedPos = index;
-          _toDoList.removeAt(index);
-
-          _saveData();
-
-          final snack = SnackBar(
-            content: Text("Tarefa \"${_lastRemoved["title"]}\" removida!"),
-            action: SnackBarAction(
-                label: "Desfazer",
-                onPressed: () {
-                  setState(() {
-                    _toDoList.insert(_lastRemovedPos, _lastRemoved);
-                    _saveData();
-                  });
-                }),
-            duration: const Duration(seconds: 2),
-          );
-
-          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(snack);
-        });
-      },
-    );
-  }
-
-  Future<File> _getFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return File("${directory.path}/data.json");
-  }
-
-  Future<File> _saveData() async {
-    String data = json.encode(_toDoList);
-
-    final file = await _getFile();
-    return file.writeAsString(data);
-  }
-
-  Future<String?> _readData() async {
-    try {
-      final file = await _getFile();
-
-      return file.readAsString();
-    } catch (e) {
-      return null;
+  int _getCount(List data) {
+    if (_search.isEmpty) {
+      return data.length;
+    } else {
+      return data.length + 1;
     }
+  }
+
+  Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    return GridView.builder(
+        padding: const EdgeInsets.all(10.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, crossAxisSpacing: 10.0, mainAxisSpacing: 10.0),
+        itemCount: _getCount(snapshot.data["data"]),
+        itemBuilder: (context, index) {
+          if (_search.isEmpty || index < snapshot.data["data"].length) {
+            //if (index < snapshot.data["data"].length) {
+            return GestureDetector(
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: snapshot.data["data"][index]["images"]["fixed_height"]
+                    ["url"],
+                height: 300.0,
+                fit: BoxFit.cover,
+              ),
+              onTap: () {
+                //navegar para GifPage
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            GifPage(snapshot.data["data"][index])));
+              },
+              onLongPress: () {
+                FlutterShare.shareFile(
+                    title: 'Compartilhar Gif',
+                    filePath: snapshot.data["data"][index]["images"]
+                        ["fixed_height"]["url"],
+                    fileType: 'image/png');
+                /*  FlutterShare.share(snapshot.data["data"][index]["images"]
+                    ["fixed_height"]["url"]); */
+              },
+            );
+          } else {
+            return GestureDetector(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.add,
+                    color: Colors.green,
+                    size: 100.0,
+                  ),
+                  Text(
+                    "Carregar mais...",
+                    style: TextStyle(color: Colors.white, fontSize: 22.0),
+                  )
+                ],
+              ),
+              onTap: () {
+                setState(() {
+                  _offset += 5;
+                });
+              },
+            );
+          }
+        });
+  }
+}
+
+//page gif
+class GifPage extends StatelessWidget {
+  final Map _gifData;
+  const GifPage(this._gifData, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_gifData["title"]),
+        backgroundColor: Colors.black,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () {
+              Share.share(_gifData["images"]["fixed_height"]["url"]);
+              /* Share.share(snapshot.data["data"][index]["images"]["fixed_height"]["url"]); */
+              /* FlutterShare.shareFile(
+                  title: 'Compartilhar Gif',
+                  filePath: _gifData["images"]["fixed_height"]["url"],
+                  fileType: 'image/png'); */
+              //Share.share(_gifData["images"]["fixed_height"]["url"]);
+              /* FlutterShare.share(_gifData["images"]["fixed_height"]["url"]); */
+            },
+          )
+        ],
+      ),
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Image.network(_gifData["images"]["fixed_height"]["url"]),
+      ),
+    );
   }
 }

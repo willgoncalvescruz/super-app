@@ -53,4 +53,3 @@ Achei muito interessante o curso, aborda de forma ampla muitas ferramentas  e te
    <p align="center">
       <a href="https://startto.dev">Daniel Ciolf</a>
    </p>
-
