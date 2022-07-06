@@ -25,10 +25,11 @@
 ## Experiencia
 Achei muito interessante o curso, aborda de forma ampla muitas ferramentas  e tecnicas de desenvolvimento e bases como (instalação, funções, lógica, herança, uso de api, componentização, reaproveitamento de código, arquitetura e muito mais), tudo foi muito bem explorado com ótima metodologia passo a passo, recomendo a todos as aulas do <a href="https://www.startto.dev/">Daniel Ciolf - Startto.dev</a>
 ### Features
-- [x] 1 - App - Indice de massa corporal
-- [x] 2 - App - Conversor de moédas
+- [x] 1 - App - Indice de massa corporal (utilização de API...)
+- [x] 2 - App - Conversor de moédas (utilização de API...)
 - [x] 3 - App - Lista de Tarefas
 - [x] 4 - App - Buscador de GIFs
+- [x] 5 - App - Agenda de Contatos (utilização camera...)
 
 
 ### Rodar

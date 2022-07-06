@@ -52,7 +52,9 @@ class _ContactPageState extends State<ContactPage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             if (_editedContact!.name != null &&
-                _editedContact!.name!.isNotEmpty) {
+                _editedContact!.name!.isNotEmpty &&
+                _editedContact!.email!.isNotEmpty &&
+                _editedContact!.phone!.isNotEmpty) {
               Navigator.pop(context, _editedContact);
             } else {
               FocusScope.of(context).requestFocus(_nameFocus);
@@ -92,6 +94,77 @@ class _ContactPageState extends State<ContactPage> {
                   });
                 },
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                    side:
+                                        const BorderSide(color: Colors.red)))),
+                    onPressed: () {
+                      ImagePicker()
+                          .pickImage(source: ImageSource.gallery)
+                          .then((file) {
+                        if (file == null) {
+                          return;
+                        }
+                        setState(() {
+                          _editedContact!.img = file.path;
+                        });
+                      });
+                    },
+                    child: const Icon(
+                      Icons.image_search,
+                      size: 25,
+                      color: Colors.red,
+                    ), //const Text('Galeria'),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                    side:
+                                        const BorderSide(color: Colors.red)))),
+                    /* style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(15),
+                    ), */
+                    onPressed: () {
+                      ImagePicker()
+                          .pickImage(source: ImageSource.camera)
+                          .then((file) {
+                        if (file == null) {
+                          return;
+                        }
+                        setState(() {
+                          _editedContact!.img = file.path;
+                        });
+                      });
+                    },
+                    child: const Icon(
+                      Icons.camera_alt,
+                      size: 25,
+                      color: Colors.red,
+                    ),
+                    //const Text('Camera'),
+                  ),
+                ],
+              ),
               TextField(
                 decoration: const InputDecoration(labelText: "Nome"),
                 onChanged: (text) {
@@ -104,7 +177,7 @@ class _ContactPageState extends State<ContactPage> {
                 focusNode: _nameFocus,
               ),
               TextField(
-                decoration: const InputDecoration(labelText: "Email"),
+                decoration: const InputDecoration(labelText: "E-mail"),
                 onChanged: (text) {
                   _userEdited = true;
                   _editedContact!.email = text;
@@ -113,7 +186,7 @@ class _ContactPageState extends State<ContactPage> {
                 keyboardType: TextInputType.emailAddress,
               ),
               TextField(
-                decoration: const InputDecoration(labelText: "Phone"),
+                decoration: const InputDecoration(labelText: "Telefone"),
                 onChanged: (text) {
                   _userEdited = true;
                   _editedContact!.phone = text;
