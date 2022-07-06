@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
 //import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
 //import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
 import 'package:super_app/screens/buscadorgifs.dart';
@@ -25,8 +26,8 @@ class HomeSuperApps extends StatelessWidget {
             const SplashScreenListaTarefas(),
         '/SplashScreenBuscadorGIFs': (context) =>
             const SplashScreenBuscadorGIFs(),
-        /* '/SplashScreenHomeAgendaContatos': (context) =>
-            const SplashScreenHomeAgendaContatos(), */
+        '/SplashScreenHomeAgendaContatos': (context) =>
+            const SplashScreenHomeAgendaContatos(),
         '/TesteResponsivo': (context) => const TesteResponsivo(),
       },
     );
@@ -59,8 +60,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // ignore: prefer_final_fields
-  List<FeatureTestItem> _elements = [
+  final List<FeatureTestItem> _elements = [
     FeatureTestItem('App-Imc', '1', '/SplashScreenHomeImc'),
     FeatureTestItem('App-Conversor', '2', '/SplashScreenHomeConversor'),
     FeatureTestItem('App-Lista', '3', '/SplashScreenListaTarefas'),

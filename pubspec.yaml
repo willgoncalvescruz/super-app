@@ -37,12 +37,12 @@ dependencies:
   grouped_list: ^5.1.2
   splash_screen_view: ^3.0.0
   http: ^0.13.4
-  path_provider: ^1.1.0
+  path_provider: ^2.0.11
   transparent_image: ^2.0.0
   flutter_share: ^2.0.0
   share: ^2.0.4
   sqflite: ^2.0.2
-  url_launcher: ^6.0.5
+  url_launcher: ^6.1.4
   image_picker: ^0.8.4+11
   image_picker_for_web: ^2.1.6
 

@@ -1,4 +1,5 @@
-/* //
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 import 'package:super_app/screens/agenda_contatos/ui/contact_page.dart';
@@ -32,8 +33,9 @@ class SplashScreenHomeAgendaContatos extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'AGENDA CONTATOS',
+      title: 'AGENDA DE CONTATOS',
       home: home,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -53,8 +55,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-
-    _getAllContacts();
+    getAllContacts();
   }
 
   @override
@@ -64,18 +65,18 @@ class _HomeState extends State<Home> {
         title: const Text("Contatos"),
         backgroundColor: Colors.red,
         centerTitle: true,
-        actions: <Widget>[
+        actions: [
           PopupMenuButton<OrderOptions>(
-            itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
-              const PopupMenuItem<OrderOptions>(
-                child: Text("Ordenar de A-Z"),
-                value: OrderOptions.orderaz,
-              ),
-              const PopupMenuItem<OrderOptions>(
-                child: Text("Ordenar de Z-A"),
-                value: OrderOptions.orderza,
-              ),
-            ],
+            itemBuilder: ((context) => <PopupMenuEntry<OrderOptions>>[
+                  const PopupMenuItem<OrderOptions>(
+                    child: Text("Ordenar de A-Z"),
+                    value: OrderOptions.orderaz,
+                  ),
+                  const PopupMenuItem<OrderOptions>(
+                    child: Text("Ordenar de Z-A"),
+                    value: OrderOptions.orderza,
+                  )
+                ]),
             onSelected: _orderList,
           )
         ],
@@ -89,11 +90,12 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.red,
       ),
       body: ListView.builder(
-          padding: const EdgeInsets.all(10.0),
-          itemCount: contacts.length,
-          itemBuilder: (context, index) {
-            return _contactCard(context, index);
-          }),
+        padding: const EdgeInsets.all(10),
+        itemCount: contacts.length,
+        itemBuilder: (context, index) {
+          return _contactCard(context, index);
+        },
+      ),
     );
   }
 
@@ -101,39 +103,63 @@ class _HomeState extends State<Home> {
     return GestureDetector(
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10),
           child: Row(
-            children: <Widget>[
-              Container(
-                width: 80.0,
-                height: 80.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: contacts[index].img != null
-                          ? FileImage(File(contacts[index].img))
-                          : AssetImage("assets/images/contato.png"),
-                      fit: BoxFit.cover),
-                ),
+            children: [
+              FutureBuilder(
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      final img = snapshot.data as ImageProvider<Object>;
+                      return Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: img,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const SizedBox(
+                        width: 80,
+                        height: 80,
+                      );
+                    }
+                  } else {
+                    return const SizedBox(
+                      width: 80,
+                      height: 80,
+                    );
+                  }
+                },
+                future: getContactImage(contacts[index].img),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Text(
                       contacts[index].name ?? "",
                       style: const TextStyle(
-                          fontSize: 22.0, fontWeight: FontWeight.bold),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       contacts[index].email ?? "",
-                      style: const TextStyle(fontSize: 18.0),
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
                     ),
                     Text(
                       contacts[index].phone ?? "",
-                      style: const TextStyle(fontSize: 18.0),
-                    )
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
                   ],
                 ),
               )
@@ -152,61 +178,75 @@ class _HomeState extends State<Home> {
         context: context,
         builder: (context) {
           return BottomSheet(
-            onClosing: () {},
-            builder: (context) {
-              return Container(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: ElevatedButton(
-                        child: const Text(
-                          "Ligar",
-                          style: TextStyle(color: Colors.red, fontSize: 20.0),
-                        ),
+              onClosing: () {},
+              builder: (context) {
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextButton(
                         onPressed: () {
-                          launch("tel:${contacts[index].phone}");
+                          _makePhoneCall("tel:${contacts[index].phone}");
+                          //launch("tel:${contacts[index].phone}");
                           Navigator.pop(context);
                         },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ElevatedButton(
                         child: const Text(
-                          "Editar",
-                          style: TextStyle(color: Colors.red, fontSize: 20.0),
+                          "Ligar",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20,
+                          ),
                         ),
+                      ),
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                           _showContactPage(contact: contacts[index]);
                         },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ElevatedButton(
                         child: const Text(
-                          "Excluir",
-                          style: TextStyle(color: Colors.red, fontSize: 20.0),
+                          "Editar",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20,
+                          ),
                         ),
+                      ),
+                      TextButton(
                         onPressed: () {
-                          helper.deleteContact(contacts[index].id);
+                          helper.deleteContact(contacts[index].id!);
                           setState(() {
                             contacts.removeAt(index);
                             Navigator.pop(context);
                           });
                         },
+                        child: const Text(
+                          "Excluir",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+                    ],
+                  ),
+                );
+              });
         });
+  }
+
+  Future<ImageProvider<Object>> getContactImage(String? path) async {
+    if (path != null) {
+      FileImage img = FileImage(File(path));
+      try {
+        await img.file.readAsBytes();
+        return FileImage(File(path));
+      } catch (e) {
+        return const AssetImage("assets/images/contato.png");
+      }
+    } else {
+      return const AssetImage("assets/images/contato.png");
+    }
   }
 
   void _showContactPage({Contact? contact}) async {
@@ -214,7 +254,7 @@ class _HomeState extends State<Home> {
         context,
         MaterialPageRoute(
             builder: (context) => ContactPage(
-                  contact: contact!,
+                  contact: contact,
                 )));
     if (recContact != null) {
       if (contact != null) {
@@ -222,11 +262,11 @@ class _HomeState extends State<Home> {
       } else {
         await helper.saveContact(recContact);
       }
-      _getAllContacts();
+      getAllContacts();
     }
   }
 
-  void _getAllContacts() {
+  void getAllContacts() {
     helper.getAllContacts().then((list) {
       setState(() {
         contacts = list;
@@ -238,16 +278,23 @@ class _HomeState extends State<Home> {
     switch (result) {
       case OrderOptions.orderaz:
         contacts.sort((a, b) {
-          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+          return a.name!.toLowerCase().compareTo(b.name!.toLowerCase());
         });
         break;
       case OrderOptions.orderza:
         contacts.sort((a, b) {
-          return b.name.toLowerCase().compareTo(a.name.toLowerCase());
+          return b.name!.toLowerCase().compareTo(a.name!.toLowerCase());
         });
         break;
     }
     setState(() {});
   }
 }
- */
+
+Future<void> _makePhoneCall(String phoneNumber) async {
+  final Uri launchUri = Uri(
+    scheme: 'tel',
+    path: phoneNumber,
+  );
+  await launchUrl(launchUri);
+}

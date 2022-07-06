@@ -12,5 +12,6 @@ void main() async {
     title: 'Aulas - Mobile',
     theme: ThemeData(primarySwatch: Colors.blue),
     home: const HomeSuperApps(),
+    debugShowCheckedModeBanner: false,
   ));
 }
