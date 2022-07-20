@@ -15,7 +15,7 @@ class TesteResponsivo extends StatelessWidget {
       text: "IMC",
       textType: TextType.ColorizeAnimationText,
       textStyle: const TextStyle(
-        fontSize: 40.0,
+        fontSize: 30.0,
       ),
       colors: const [
         Colors.purple,
@@ -37,10 +37,10 @@ class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     //var size = MediaQuery.of(context).size;

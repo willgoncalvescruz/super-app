@@ -44,9 +44,10 @@ class _ContactPageState extends State<ContactPage> {
     return WillPopScope(
       onWillPop: _requestPop,
       child: Scaffold(
+        backgroundColor: Colors.grey[800],
         appBar: AppBar(
-          backgroundColor: Colors.red,
-          title: Text(_editedContact!.name ?? "Novo Contato"),
+          backgroundColor: Colors.grey[900],
+          title: Text(_editedContact!.name ?? "Criar Contato"),
           centerTitle: true,
         ),
         floatingActionButton: FloatingActionButton(
@@ -60,11 +61,11 @@ class _ContactPageState extends State<ContactPage> {
               FocusScope.of(context).requestFocus(_nameFocus);
             }
           },
-          child: const Icon(Icons.save),
           backgroundColor: Colors.red,
+          child: const Icon(Icons.save),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               GestureDetector(
@@ -123,7 +124,7 @@ class _ContactPageState extends State<ContactPage> {
                     },
                     child: const Icon(
                       Icons.image_search,
-                      size: 25,
+                      size: 35,
                       color: Colors.red,
                     ), //const Text('Galeria'),
                   ),
@@ -140,10 +141,6 @@ class _ContactPageState extends State<ContactPage> {
                                     borderRadius: BorderRadius.circular(100),
                                     side:
                                         const BorderSide(color: Colors.red)))),
-                    /* style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(15),
-                    ), */
                     onPressed: () {
                       ImagePicker()
                           .pickImage(source: ImageSource.camera)
@@ -158,7 +155,7 @@ class _ContactPageState extends State<ContactPage> {
                     },
                     child: const Icon(
                       Icons.camera_alt,
-                      size: 25,
+                      size: 35,
                       color: Colors.red,
                     ),
                     //const Text('Camera'),
@@ -166,7 +163,18 @@ class _ContactPageState extends State<ContactPage> {
                 ],
               ),
               TextField(
-                decoration: const InputDecoration(labelText: "Nome"),
+                style: const TextStyle(
+                    fontSize: 20,
+                    height: 2,
+                    color: Colors.white, //font color
+                    backgroundColor: Colors.transparent,
+                    fontStyle: FontStyle.normal),
+                decoration: const InputDecoration(
+                  hintStyle: TextStyle(color: Colors.white),
+                  labelText: "Nome",
+                  //fillColor: Colors.white,
+                  //filled: true,
+                ),
                 onChanged: (text) {
                   _userEdited = true;
                   setState(() {
@@ -177,6 +185,12 @@ class _ContactPageState extends State<ContactPage> {
                 focusNode: _nameFocus,
               ),
               TextField(
+                style: const TextStyle(
+                    fontSize: 20,
+                    height: 2,
+                    color: Colors.white, //font color
+                    backgroundColor: Colors.transparent,
+                    fontStyle: FontStyle.normal),
                 decoration: const InputDecoration(labelText: "E-mail"),
                 onChanged: (text) {
                   _userEdited = true;
@@ -186,6 +200,12 @@ class _ContactPageState extends State<ContactPage> {
                 keyboardType: TextInputType.emailAddress,
               ),
               TextField(
+                style: const TextStyle(
+                    fontSize: 20,
+                    height: 2,
+                    color: Colors.white, //font color
+                    backgroundColor: Colors.transparent,
+                    fontStyle: FontStyle.normal),
                 decoration: const InputDecoration(labelText: "Telefone"),
                 onChanged: (text) {
                   _userEdited = true;

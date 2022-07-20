@@ -22,7 +22,7 @@ class SplashScreenListaTarefas extends StatelessWidget {
       text: "LISTA DE TAREFAS",
       textType: TextType.ColorizeAnimationText,
       textStyle: const TextStyle(
-        fontSize: 40.0,
+        fontSize: 30.0,
       ),
       colors: const [
         Colors.purple,
@@ -55,10 +55,10 @@ class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   final _toDoController = TextEditingController();
   bool _validate = false;
 
@@ -179,13 +179,13 @@ class _HomeState extends State<Home> {
                   ),
                 )),
                 ElevatedButton(
-                  child: const Text("ADICIONAR"),
                   onPressed: _addToDo,
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue[900],
                     onPrimary: Colors.white,
                     side: const BorderSide(color: Colors.blue, width: 3),
                   ),
+                  child: const Text("ADICIONAR"),
                 )
               ],
             ),

@@ -21,15 +21,14 @@ class SplashScreenHomeAgendaContatos extends StatelessWidget {
       text: "AGENDA DE CONTATOS",
       textType: TextType.ColorizeAnimationText,
       textStyle: const TextStyle(
-        fontSize: 40.0,
+        fontSize: 30.0,
       ),
       colors: const [
-        Colors.purple,
-        Colors.blue,
-        Colors.yellow,
+        Colors.red,
+        Colors.white,
         Colors.red,
       ],
-      backgroundColor: Colors.grey[700],
+      backgroundColor: Colors.grey[900],
     );
 
     return MaterialApp(
@@ -44,10 +43,10 @@ class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   ContactHelper helper = ContactHelper();
 
   List<Contact> contacts = [];
@@ -63,31 +62,31 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Contatos"),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.grey[900],
         centerTitle: true,
         actions: [
           PopupMenuButton<OrderOptions>(
             itemBuilder: ((context) => <PopupMenuEntry<OrderOptions>>[
                   const PopupMenuItem<OrderOptions>(
-                    child: Text("Ordenar de A-Z"),
                     value: OrderOptions.orderaz,
+                    child: Text("Ordenar de A-Z"),
                   ),
                   const PopupMenuItem<OrderOptions>(
-                    child: Text("Ordenar de Z-A"),
                     value: OrderOptions.orderza,
+                    child: Text("Ordenar de Z-A"),
                   )
                 ]),
             onSelected: _orderList,
           )
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[800],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showContactPage();
         },
-        child: const Icon(Icons.add),
         backgroundColor: Colors.red,
+        child: const Icon(Icons.add),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(10),
@@ -103,7 +102,7 @@ class _HomeState extends State<Home> {
     return GestureDetector(
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(15),
           child: Row(
             children: [
               FutureBuilder(
@@ -112,8 +111,8 @@ class _HomeState extends State<Home> {
                     if (snapshot.hasData) {
                       final img = snapshot.data as ImageProvider<Object>;
                       return Container(
-                        width: 80,
-                        height: 80,
+                        width: 90,
+                        height: 90,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
@@ -123,21 +122,21 @@ class _HomeState extends State<Home> {
                       );
                     } else {
                       return const SizedBox(
-                        width: 80,
-                        height: 80,
+                        width: 90,
+                        height: 90,
                       );
                     }
                   } else {
                     return const SizedBox(
-                      width: 80,
-                      height: 80,
+                      width: 90,
+                      height: 90,
                     );
                   }
                 },
                 future: getContactImage(contacts[index].img),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 25),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -181,6 +180,7 @@ class _HomeState extends State<Home> {
               onClosing: () {},
               builder: (context) {
                 return Container(
+                  color: Colors.grey[900],
                   padding: const EdgeInsets.all(10),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

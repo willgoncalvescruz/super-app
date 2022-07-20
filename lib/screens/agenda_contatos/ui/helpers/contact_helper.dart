@@ -1,5 +1,5 @@
+import "package:path/path.dart" show join;
 import "package:sqflite/sqflite.dart";
-import "package:path/path.dart";
 
 const String contactTable = "contactTable";
 const String idColumn = "idColumn";

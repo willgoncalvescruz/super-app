@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
-//import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
-//import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
 import 'package:super_app/screens/buscadorgifs.dart';
 import 'package:super_app/screens/conversor.dart';
 import 'package:super_app/screens/imc.dart';
@@ -37,7 +35,6 @@ class HomeSuperApps extends StatelessWidget {
 class SecondCategory extends StatelessWidget {
   const SecondCategory({Key? key}) : super(key: key);
 
-  //const SecondCategory({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return const Text("");
@@ -48,35 +45,41 @@ class FeatureTestItem {
   final String featureName;
   final String group;
   final String route;
+  final String logoApp;
 
-  FeatureTestItem(this.featureName, this.group, this.route);
+  FeatureTestItem(this.featureName, this.group, this.route, this.logoApp);
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   final List<FeatureTestItem> _elements = [
-    FeatureTestItem('App-Imc', '1', '/SplashScreenHomeImc'),
-    FeatureTestItem('App-Conversor', '2', '/SplashScreenHomeConversor'),
-    FeatureTestItem('App-Lista', '3', '/SplashScreenListaTarefas'),
-    FeatureTestItem('App-Gifs', '4', '/SplashScreenBuscadorGIFs'),
-    FeatureTestItem(
-        'App-Agenda-Contatos', '5', '/SplashScreenHomeAgendaContatos'),
-    FeatureTestItem('Teste-Responviso', '6', '/TesteResponsivo'),
+    FeatureTestItem('App-Calculo de Imc', '1', '/SplashScreenHomeImc',
+        'assets/images/imc.png'),
+    FeatureTestItem('App-Conversor de Moedas', '2',
+        '/SplashScreenHomeConversor', 'assets/images/conversor.png'),
+    FeatureTestItem('App-Lista de Tarefas', '3', '/SplashScreenListaTarefas',
+        'assets/images/lista.png'),
+    FeatureTestItem('App-Buscador de Gifs', '4', '/SplashScreenBuscadorGIFs',
+        'assets/images/gif.png'),
+    FeatureTestItem('App-Agenda de Contatos', '5',
+        '/SplashScreenHomeAgendaContatos', 'assets/images/contato.png'),
+    FeatureTestItem('App-Teste Responsividade', '6', '/TesteResponsivo',
+        'assets/images/apps.png'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home - SuperApps"),
+        title: const Text("Super-App"),
         centerTitle: true,
-        backgroundColor: Colors.blue[800],
+        backgroundColor: Colors.red,
       ),
       body: GroupedListView<FeatureTestItem, String>(
         elements: _elements,
@@ -87,19 +90,19 @@ class _MyHomePageState extends State<MyHomePage> {
         order: GroupedListOrder.DESC,
         useStickyGroupSeparators: false,
         groupSeparatorBuilder: (String value) => Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.only(left: 25.0, top: 10.0, bottom: 10.0),
           child: Text(
             value,
             textAlign: TextAlign.left,
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
         itemBuilder: (context, element) {
           return Card(
-            color: Colors.grey[100],
+            color: Colors.orange[50],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-              side: const BorderSide(width: 2, color: Colors.black12),
+              side: const BorderSide(width: 3, color: Colors.red),
             ),
             elevation: 10,
             child: InkWell(
@@ -128,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(imageSize / 2),
         child: Image.asset(
-          "assets/images/apps.png",
+          element.logoApp,
           fit: BoxFit.contain,
           alignment: Alignment.center,
         ),
@@ -141,26 +144,20 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blueAccent),
-                      borderRadius: const BorderRadius.all(Radius.circular(5))),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10))),
                   child: Padding(
-                    padding: const EdgeInsets.all(13.0),
+                    padding: const EdgeInsets.all(23.0),
                     child: Text(
                       element.featureName,
-                      style: const TextStyle(fontSize: 15),
+                      style: const TextStyle(fontSize: 16),
                     ),
-                  ),
-                ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    element.route,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               ],

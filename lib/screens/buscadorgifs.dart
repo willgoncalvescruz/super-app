@@ -1,5 +1,6 @@
 import 'dart:async' show Future;
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:http/http.dart' as http;
@@ -21,29 +22,29 @@ class SplashScreenBuscadorGIFs extends StatelessWidget {
       text: "BUSCADOR DE GIFS",
       textType: TextType.ColorizeAnimationText,
       textStyle: const TextStyle(
-        fontSize: 40.0,
+        fontSize: 30.0,
       ),
       colors: const [
-        Colors.purple,
-        Colors.blue,
-        Colors.yellow,
+        Colors.white,
         Colors.red,
       ],
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[800],
     );
 
     return MaterialApp(
       title: 'BUSCADOR DE GIFS',
       home: home,
       theme: ThemeData(
-          hintColor: Colors.amber,
+          hintColor: Colors.brown,
           primaryColor: Colors.white,
-          inputDecorationTheme: const InputDecorationTheme(
-            enabledBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-            focusedBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-            hintStyle: TextStyle(color: Colors.white),
+          inputDecorationTheme: InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(color: Colors.grey, width: 2.0)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(35.0),
+                borderSide: const BorderSide(color: Colors.white)),
+            hintStyle: const TextStyle(color: Colors.white),
           )),
     );
   }
@@ -53,22 +54,40 @@ class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
-  late String _search;
-  int _offset = 0;
+class HomeState extends State<Home> {
+  var list = [
+    'gato',
+    'avião',
+    'elefante',
+    'bola',
+    'bebê',
+    'peixe',
+    'futebol',
+    'chicara',
+    'casa',
+    'carro'
+  ];
+  var listnumber = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  final _random = Random();
+  get elemento => list[_random.nextInt(list.length)];
+  get elementNumber => listnumber[_random.nextInt(list.length)];
+
+  late String _search = elemento;
+  late int _offset = elementNumber;
 
   Future<Map> _getGifs() async {
     http.Response response;
 
     if (_search.isEmpty) {
       response = await http.get(Uri.parse(
-          'https://api.giphy.com/v1/gifs/trending?api_key=wusbFwUExpkztfjeMr3QRimPUc4kd1J9&limit=5&rating=G'));
+          'https://api.giphy.com/v1/gifs/trending?api_key=wusbFwUExpkztfjeMr3QRimPUc4kd1J9&limit=14&rating=G'));
     } else {
       response = await http.get(Uri.parse(
-          'https://api.giphy.com/v1/gifs/search?api_key=wusbFwUExpkztfjeMr3QRimPUc4kd1J9&q=$_search&limit=5&offset=$_offset&rating=G&lang=en'));
+          'https://api.giphy.com/v1/gifs/search?api_key=wusbFwUExpkztfjeMr3QRimPUc4kd1J9&q=$_search&limit=14&offset=$_offset&rating=G&lang=en'));
     }
     return json.decode(response.body);
   }
@@ -79,7 +98,7 @@ class _HomeState extends State<Home> {
 
     _getGifs().then((map) {
       if (kDebugMode) {
-        print(map);
+        // print(map);
       }
     });
   }
@@ -93,7 +112,7 @@ class _HomeState extends State<Home> {
             "https://developers.giphy.com/branch/master/static/header-logo-0fec0225d189bc0eae27dac3e3770582.gif"),
         centerTitle: true,
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey[900],
       body: Column(
         children: <Widget>[
           Padding(
@@ -103,7 +122,7 @@ class _HomeState extends State<Home> {
                   labelText: "Pesquise Aqui!",
                   labelStyle: TextStyle(color: Colors.white),
                   border: OutlineInputBorder()),
-              style: const TextStyle(color: Colors.white, fontSize: 18.0),
+              style: const TextStyle(color: Colors.white, fontSize: 20.0),
               textAlign: TextAlign.center,
               onSubmitted: (text) {
                 setState(() {
@@ -121,8 +140,8 @@ class _HomeState extends State<Home> {
                     case ConnectionState.waiting:
                     case ConnectionState.none:
                       return Container(
-                        width: 200.0,
-                        height: 200.0,
+                        width: 210.0,
+                        height: 210.0,
                         alignment: Alignment.center,
                         child: const CircularProgressIndicator(
                           valueColor:
@@ -156,21 +175,19 @@ class _HomeState extends State<Home> {
     return GridView.builder(
         padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, crossAxisSpacing: 10.0, mainAxisSpacing: 10.0),
+            crossAxisCount: 3, crossAxisSpacing: 15.0, mainAxisSpacing: 15.0),
         itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (context, index) {
           if (_search.isEmpty || index < snapshot.data["data"].length) {
-            //if (index < snapshot.data["data"].length) {
             return GestureDetector(
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: snapshot.data["data"][index]["images"]["fixed_height"]
                     ["url"],
-                height: 300.0,
+                height: 150.0,
                 fit: BoxFit.cover,
               ),
               onTap: () {
-                //navegar para GifPage
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -183,29 +200,29 @@ class _HomeState extends State<Home> {
                     filePath: snapshot.data["data"][index]["images"]
                         ["fixed_height"]["url"],
                     fileType: 'image/png');
-                /*  FlutterShare.share(snapshot.data["data"][index]["images"]
-                    ["fixed_height"]["url"]); */
               },
             );
           } else {
             return GestureDetector(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Icons.add,
-                    color: Colors.green,
-                    size: 100.0,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.green, shape: BoxShape.rectangle),
+                    child: ClipOval(
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(50), // Image radius
+                        child: const Icon(Icons.add,
+                            size: 100, color: Colors.white),
+                      ),
+                    ),
                   ),
-                  Text(
-                    "Carregar mais...",
-                    style: TextStyle(color: Colors.white, fontSize: 22.0),
-                  )
                 ],
               ),
               onTap: () {
                 setState(() {
-                  _offset += 5;
+                  _offset += 14;
                 });
               },
             );
@@ -214,7 +231,6 @@ class _HomeState extends State<Home> {
   }
 }
 
-//page gif
 class GifPage extends StatelessWidget {
   final Map _gifData;
   const GifPage(this._gifData, {Key? key}) : super(key: key);
@@ -230,13 +246,6 @@ class GifPage extends StatelessWidget {
             icon: const Icon(Icons.share),
             onPressed: () {
               Share.share(_gifData["images"]["fixed_height"]["url"]);
-              /* Share.share(snapshot.data["data"][index]["images"]["fixed_height"]["url"]); */
-              /* FlutterShare.shareFile(
-                  title: 'Compartilhar Gif',
-                  filePath: _gifData["images"]["fixed_height"]["url"],
-                  fileType: 'image/png'); */
-              //Share.share(_gifData["images"]["fixed_height"]["url"]);
-              /* FlutterShare.share(_gifData["images"]["fixed_height"]["url"]); */
             },
           )
         ],
