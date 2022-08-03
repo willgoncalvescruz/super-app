@@ -1,9 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 import 'package:super_app/home_super_app.dart';
 
 void main() async {
-/*   if (kDebugMode) {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  //Firebase.initializeApp();
+  //await Firebase.initializeApp();
+  /*   if (kDebugMode) {
     print(await getData());
   }
   if (kDebugMode) {
@@ -30,7 +35,7 @@ void main() async {
   );
 
   runApp(MaterialApp(
-    title: 'Aulas - Mobile',
+    title: 'Mobile - Super App',
     theme: ThemeData(primarySwatch: Colors.blue),
     home: home,
     debugShowCheckedModeBanner: false,

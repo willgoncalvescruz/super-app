@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import "package:path/path.dart" show join;
 import "package:sqflite/sqflite.dart";
 

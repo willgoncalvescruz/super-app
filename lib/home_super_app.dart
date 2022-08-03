@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
 import 'package:super_app/screens/buscadorgifs.dart';
+import 'package:super_app/screens/chat_online/chat_online.dart';
 import 'package:super_app/screens/conversor.dart';
 import 'package:super_app/screens/imc.dart';
 import 'package:super_app/screens/lista.dart';
@@ -26,6 +27,8 @@ class HomeSuperApps extends StatelessWidget {
             const SplashScreenBuscadorGIFs(),
         '/SplashScreenHomeAgendaContatos': (context) =>
             const SplashScreenHomeAgendaContatos(),
+        '/SplashScreenHomeChatOnline': (context) =>
+            const SplashScreenHomeChatOnline(),
         '/TesteResponsivo': (context) => const TesteResponsivo(),
       },
     );
@@ -69,7 +72,9 @@ class MyHomePageState extends State<MyHomePage> {
         'assets/images/gif.png'),
     FeatureTestItem('App-Agenda de Contatos', '5',
         '/SplashScreenHomeAgendaContatos', 'assets/images/contato.png'),
-    FeatureTestItem('App-Teste Responsividade', '6', '/TesteResponsivo',
+    FeatureTestItem('App-Chat Online', '6', '/SplashScreenHomeChatOnline',
+        'assets/images/chatonline.png'),
+    FeatureTestItem('App-Teste Responsividade', '7', '/TesteResponsivo',
         'assets/images/apps.png'),
   ];
 
@@ -81,44 +86,47 @@ class MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Colors.red,
       ),
-      body: GroupedListView<FeatureTestItem, String>(
-        elements: _elements,
-        groupBy: (element) => element.group,
-        groupComparator: (value1, value2) => value2.compareTo(value1),
-        itemComparator: (item1, item2) =>
-            item1.featureName.compareTo(item2.featureName),
-        order: GroupedListOrder.DESC,
-        useStickyGroupSeparators: false,
-        groupSeparatorBuilder: (String value) => Padding(
-          padding: const EdgeInsets.only(left: 25.0, top: 10.0, bottom: 10.0),
-          child: Text(
-            value,
-            textAlign: TextAlign.left,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: GroupedListView<FeatureTestItem, String>(
+          elements: _elements,
+          groupBy: (element) => element.group,
+          groupComparator: (value1, value2) => value2.compareTo(value1),
+          itemComparator: (item1, item2) =>
+              item1.featureName.compareTo(item2.featureName),
+          order: GroupedListOrder.ASC,
+          useStickyGroupSeparators: false,
+          groupSeparatorBuilder: (String value) => Padding(
+            padding: const EdgeInsets.only(left: 25.0, top: 10.0, bottom: 10.0),
+            child: Text(
+              value,
+              textAlign: TextAlign.left,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ),
-        ),
-        itemBuilder: (context, element) {
-          return Card(
-            color: Colors.orange[50],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: const BorderSide(width: 3, color: Colors.red),
-            ),
-            elevation: 10,
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, element.route);
-              },
-              //elevation: 10,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 16.0),
-                height: 150.0,
-                child: generateDummyCardContent(element),
+          itemBuilder: (context, element) {
+            return Card(
+              color: Colors.orange[50],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: const BorderSide(width: 3, color: Colors.red),
               ),
-            ),
-          );
-        },
+              elevation: 10,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, element.route);
+                },
+                //elevation: 10,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 16.0),
+                  height: 150.0,
+                  child: generateDummyCardContent(element),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
