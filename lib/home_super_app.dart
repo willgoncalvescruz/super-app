@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
 import 'package:super_app/screens/buscadorgifs.dart';
+import 'package:super_app/screens/chat_diego_antunes/chat_main.dart';
 import 'package:super_app/screens/chat_online/chat_online.dart';
 import 'package:super_app/screens/conversor.dart';
 import 'package:super_app/screens/imc.dart';
@@ -29,7 +30,8 @@ class HomeSuperApps extends StatelessWidget {
             const SplashScreenHomeAgendaContatos(),
         '/SplashScreenHomeChatOnline': (context) =>
             const SplashScreenHomeChatOnline(),
-        '/TesteResponsivo': (context) => const TesteResponsivo(),
+        '/TesteResponsivo': (context) => App(),
+        //'/TesteResponsivo': (context) => const TesteResponsivo(),
       },
     );
   }

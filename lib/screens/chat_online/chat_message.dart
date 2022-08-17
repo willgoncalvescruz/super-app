@@ -19,13 +19,13 @@ class ChatMessage extends StatelessWidget {
     //Timestamp convertedDateTime = now.toString() as Timestamp;
 
     return Card(
-      elevation: 2,
-      color: Colors.indigo[50],
-      shadowColor: Colors.grey,
+      elevation: 3,
+      color: Colors.white70,
+      shadowColor: Colors.black,
       margin: const EdgeInsets.all(5),
       shape: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Colors.indigo, width: 0.1)),
+          borderSide: BorderSide(color: Colors.indigo[900]!, width: 0.3)),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Row(

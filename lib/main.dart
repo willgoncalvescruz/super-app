@@ -2,10 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 import 'package:super_app/home_super_app.dart';
+import 'package:native_notify/native_notify.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  NativeNotify.initialize(1341, 'raM4eXaYwQL1frPvWGfQaE', null, null);
   //Firebase.initializeApp();
   //await Firebase.initializeApp();
   /*   if (kDebugMode) {

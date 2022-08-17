@@ -1,13 +1,14 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:super_app/screens/chat_online/chat_message.dart';
 import 'package:super_app/screens/chat_online/text_composer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -26,7 +27,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-
     FirebaseAuth.instance.authStateChanges().listen((user) {
       setState(() {
         _currentUser = user;
@@ -68,7 +68,8 @@ class _ChatScreenState extends State<ChatScreen> {
     if (user == null) {
 //      _scaffoldKey.currentState.showSnackBar(SnackBar(
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Não foi possível fazer o login. Tente novamente!'),
+        content: Text('Faça seu login e Tente novamente!',
+            textAlign: TextAlign.center),
         backgroundColor: Colors.red,
         //duration: Duration(seconds: 3),
       ));
@@ -80,75 +81,60 @@ class _ChatScreenState extends State<ChatScreen> {
       "senderPhotoUrl": user.photoURL,
       "time": Timestamp.now(),
     };
+    /* Future uploadFile() async {
+      PlatformFile? pickedFile;
+      UploadTask? uploadTask;
+      final path =
+          'files/${pickedFile!.name + DateTime.now().millisecondsSinceEpoch.toString()}';
+      final file = File(pickedFile.path!);
+      //child(user.uid + DateTime.now().millisecondsSinceEpoch.toString())
+      final ref = FirebaseStorage.instance.ref().child(path);
+      setState(() {
+        uploadTask = ref.putFile(file);
+      });
+
+      final snapshot = await uploadTask!.whenComplete(() {});
+      final urlDownload = await snapshot.ref.getDownloadURL();
+      data['imgUrl'] = urlDownload;
+      if (kDebugMode) {
+        print('#####Dowload Link: => $urlDownload');
+      }
+      setState(() {
+        uploadTask = null;
+      });
+    } */
 
     if (imgFile != null) {
+      //uploadFile();
       //StorageUploadTask
-      UploadTask task = FirebaseStorage.instance
-          .ref()
-          .child(user.uid + DateTime.now().millisecondsSinceEpoch.toString())
-          .putFile(imgFile);
-      setState(() {
-        _isLoading = true;
-      });
-      if (kDebugMode) {
-        print("####PRINT UploadTask => $task");
-      }
-      /* FirebaseStorage task = FirebaseStorage.instance;
-      Reference ref = task
-          .ref()
-          .child(user.uid + DateTime.now().millisecondsSinceEpoch.toString());
-      await ref.putFile(File(imgFile.path));
-      setState(() {
-        _isLoading = true;
-      });
-      String imageUrl = await ref.getDownloadURL();
-      if (kDebugMode) {
-        print("####PRINT UploadTask ImageUrl=> $imageUrl");
-      } */
-      //
-//StorageTaksSnapshot
-      //TaskSnapshot taskSnapshot = task.snapshot;
-      TaskSnapshot taskSnapshot = task.snapshot;
-      final url = await taskSnapshot.ref.getDownloadURL();
-      data['imgUrl'] = url;
-      if (kDebugMode) {
-        print("####PRINT TaskSnapshot => $url");
-      }
-      setState(() {
-        _isLoading = false;
-      });
-      /* UploadTask task = FirebaseStorage.instance
-          .ref()
-          .child(user.uid + DateTime.now().millisecondsSinceEpoch.toString())
-          .putFile(imgFile);
+      //UploadTask task = FirebaseStorage.instance.ref().child(user.uid + DateTime.now().millisecondsSinceEpoch.toString()).putFile(imgFile);
+      /*      PlatformFile? pickedFile;
+      UploadTask? uploadTask; */
 
+      // upload
+/* 
+      PlatformFile? pickedFile;
+      UploadTask? uploadTask;
+      final path =
+          'files/${pickedFile!.name + DateTime.now().millisecondsSinceEpoch.toString()}';
+      final file = File(pickedFile.path!);
+      //child(user.uid + DateTime.now().millisecondsSinceEpoch.toString())
+      final ref = FirebaseStorage.instance.ref().child(path);
       setState(() {
-        _isLoading = true;
+        uploadTask = ref.putFile(file);
       });
 
-      TaskSnapshot taskSnapshot = (task.snapshot.state) as TaskSnapshot;
-      String url = await taskSnapshot.ref.getDownloadURL();
-      data['imgUrl'] = url;
+      final snapshot = await uploadTask!.whenComplete(() {});
+      final urlDownload = await snapshot.ref.getDownloadURL();
+      data['imgUrl'] = urlDownload;
       if (kDebugMode) {
-        print("####PRINT TaskSnapshot => $url");
-      } */
-      //String imageUrl = url;
-      /*    if (kDebugMode) {
-        print("####PRINT UploadTask ImageUrl=> $imageUrl");
-      } */
-
-      //upload and get download url
-/*   Reference ref = FirebaseStorage.instance.ref().child(user.uid + DateTime.now().millisecondsSinceEpoch.toString());//generate a unique name
-  await ref.putFile(File(imgFile.path));//you need to add path here  
-  final imageUrl = await ref.getDownloadURL();
-  data['imgUrl'] = imageUrl;
-if (kDebugMode) {
-        print("####PRINT UploadTask ImageUrl=> $imageUrl");
+        print('#####Dowload Link: => $urlDownload');
       }
-      //upload final
-           setState(() {
-        _isLoading = false;
+      setState(() {
+        uploadTask = null;
       }); */
+      // upload
+
     }
 
     //if (text != null) data['text'] = text;
@@ -157,6 +143,27 @@ if (kDebugMode) {
     FirebaseFirestore.instance.collection('messages').add(data);
   }
 
+  void _loginUser() async {
+    final User? user = await _getUser();
+
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Faça seu login e Tente novamente!',
+            textAlign: TextAlign.center),
+        backgroundColor: Colors.red,
+        //duration: Duration(seconds: 3),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content:
+            Text('Login realizado com sucesso!', textAlign: TextAlign.center),
+        //backgroundColor: Colors.grey,
+        //duration: Duration(seconds: 3),
+      ));
+    }
+  }
+
+  //
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -166,84 +173,87 @@ if (kDebugMode) {
           backgroundColor: Colors.indigo[900],
           title: Text(
             _currentUser != null
-                ? 'Olá, ${_currentUser?.displayName}'
-                : 'Chat App - Você está Offline',
+                ? 'Olá, ${_currentUser?.displayName} - Online'
+                : 'Chat-App - Offline',
           ),
+          leading: _currentUser == null
+              ? IconButton(
+                  icon: const Icon(Icons.assignment_ind),
+                  tooltip: 'Fazer login com o Google',
+                  onPressed: () {
+                    _loginUser();
+                  },
+                )
+              : Container(),
           centerTitle: true,
           elevation: 0,
           actions: <Widget>[
             _currentUser != null
                 ? IconButton(
-                    icon: const Icon(Icons.exit_to_app),
+                    icon: const Icon(Icons.logout_outlined), //exit_to_app
                     onPressed: () {
                       FirebaseAuth.instance.signOut();
                       googleSignIn.signOut();
                       //_scaffoldKey.currentState.showSnackBar(SnackBar(
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Você saiu com sucesso!'),
+                        content: Text('Você saiu da conta Google!',
+                            textAlign: TextAlign.center),
                       ));
                     },
                   )
                 : Container()
           ],
         ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('messages')
-                    .orderBy('time')
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    default:
-                      List<DocumentSnapshot> documents =
-                          snapshot.data!.docs.reversed.toList();
-
-                      return ListView.builder(
-                          itemCount: documents.length,
-                          reverse: true,
-                          itemBuilder: (context, index) {
-                            return ChatMessage(
-                              documents[index].data() as Map<String, dynamic>,
-                              documents[index].data() == _currentUser?.uid,
-                            );
-                          });
-                  }
-                },
-              ),
+        body: Container(
+          //color: Colors.yellow[100],
+          decoration: BoxDecoration(
+            color: Colors.blue[100],
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.8), BlendMode.dstATop),
+              image: const ExactAssetImage('assets/images/chat.png'),
             ),
-            _isLoading ? const LinearProgressIndicator() : Container(),
-            TextComposer(_sendMessage),
-          ],
+          ),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('messages')
+                      .orderBy('time')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      default:
+                        List<DocumentSnapshot> documents =
+                            snapshot.data!.docs.reversed.toList();
+
+                        return ListView.builder(
+                            itemCount: documents.length,
+                            reverse: true,
+                            itemBuilder: (context, index) {
+                              return ChatMessage(
+                                documents[index].data() as Map<String, dynamic>,
+                                documents[index].data() == _currentUser?.uid,
+                              );
+                            });
+                    }
+                  },
+                ),
+              ),
+              _isLoading ? const LinearProgressIndicator() : Container(),
+              TextComposer(_sendMessage),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-
-
-//return uploadingData('productName', 'productPrice', 'imageUrl');
-/*   FirebaseFirestore.instance
-      .collection("rooms")
-      .doc("roomA")
-      .collection("messages")
-      .doc("message1"); */
-//  FirebaseFirestore.instance.collection("col").doc("doc");
-
-/* uploadingData(
-    String productName, String productPrice, String imageUrl) async {
-  await FirebaseFirestore.instance.collection("products").add({
-    'productName': 'produto1',
-    'productPrice': '10',
-    'imageUrl': 'produto.jpg'
-  });
-} */

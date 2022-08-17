@@ -29,7 +29,7 @@ Achei muito interessante o curso, aborda de forma ampla muitas ferramentas  e te
 - [x] 2 - App - Conversor de moédas (utilização de API...)
 - [x] 3 - App - Lista de Tarefas
 - [x] 4 - App - Buscador de GIFs
-- [x] 5 - App - Agenda de Contatos (utilização camera...)
+- [x] 5 - App - Agenda de Contatos (Banco Firebase - Utilização camera ou Galeria de Imagens...)
 
 
 ### Rodar

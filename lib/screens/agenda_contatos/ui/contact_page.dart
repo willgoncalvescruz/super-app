@@ -68,7 +68,7 @@ class _ContactPageState extends State<ContactPage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              GestureDetector(
+              InkWell(
                 child: Container(
                   width: 140,
                   height: 140,
