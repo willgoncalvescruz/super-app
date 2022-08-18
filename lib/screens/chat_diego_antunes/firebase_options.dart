@@ -58,7 +58,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '403150866921',
     projectId: 'flutter-tutoriais',
     storageBucket: 'flutter-tutoriais.appspot.com',
-    iosClientId: '403150866921-ojn0pdk3uutftruhk8081fmgp9ue4dcm.apps.googleusercontent.com',
+    iosClientId:
+        '403150866921-ojn0pdk3uutftruhk8081fmgp9ue4dcm.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterFirebaseStorage',
   );
 
@@ -68,7 +69,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '403150866921',
     projectId: 'flutter-tutoriais',
     storageBucket: 'flutter-tutoriais.appspot.com',
-    iosClientId: '403150866921-ojn0pdk3uutftruhk8081fmgp9ue4dcm.apps.googleusercontent.com',
+    iosClientId:
+        '403150866921-ojn0pdk3uutftruhk8081fmgp9ue4dcm.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterFirebaseStorage',
   );
 }

@@ -4,18 +4,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-//import 'package:image_picker/image_picker.dart';
-
-//ja fiz seleção da imagem na paste e upload no firebase
-//pendente para terminar
-// incluir data['imgUrl'] = url;
-// _isLoading = false;
-//incluir imagem no "widget.sendMessage(imgFile: imgFile)"";
+import 'package:super_app/screens/chat_online/chat_screen.dart';
 
 class TextComposer extends StatefulWidget {
   const TextComposer(this.sendMessage, {Key? key}) : super(key: key);
 
-  final Function({String? text, File? imgFile}) sendMessage;
+  final Function({String? text, XFile? imgFile}) sendMessage;
 
   @override
   _TextComposerState createState() => _TextComposerState();
@@ -27,9 +21,16 @@ class _TextComposerState extends State<TextComposer> {
   PlatformFile? pickedFile;
   UploadTask? uploadTask;
 
-  Future uploadFile() async {
+  //get urlDownload => uploadFile();
+
+  final FirebaseStorage storage = FirebaseStorage.instance;
+
+  List<Reference> refs = [];
+  List<String> arquivos = [];
+
+  /* Future uploadFile() async {
     final path =
-        'files/${pickedFile!.name + DateTime.now().millisecondsSinceEpoch.toString()}';
+        'files/img-${pickedFile!.name + DateTime.now().millisecondsSinceEpoch.toString()}.png';
     final file = File(pickedFile!.path!);
     //child(user.uid + DateTime.now().millisecondsSinceEpoch.toString())
     final ref = FirebaseStorage.instance.ref().child(path);
@@ -47,22 +48,9 @@ class _TextComposerState extends State<TextComposer> {
     setState(() {
       uploadTask = null;
     });
-  }
-
-/*   Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles();
-
-    if (result == null) return;
-    setState(() {
-      pickedFile = result.files.first;
-    });
   } */
-  //end selectedFileCamera
 
   bool _isComposing = false;
-
-/*   get _currentUser => User;
-  get googleSignIn => GoogleSignIn; */
 
   //get pickedFile => openCamera();
 
@@ -75,100 +63,63 @@ class _TextComposerState extends State<TextComposer> {
 
   @override
   Widget build(BuildContext context) {
-    //var teste = _getUserMensagem.toString();
-/*     if (kDebugMode) {
-      print("#### teste => $teste");
-    } */
-/*     var material = const Material();
-    Color c1 = const Color(0x00ffffff); */
-
+    var inputDecorationEnviarMensagem = InputDecoration(
+      fillColor: Colors.white24,
+      filled: true,
+      hintText: ('Enviar mensagem'),
+      contentPadding: const EdgeInsets.all(17),
+      suffixStyle: const TextStyle(color: Colors.black),
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.indigo[900]!),
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.indigo[900]!),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.indigo[900]!),
+        borderRadius: BorderRadius.circular(30),
+      ),
+    );
+    var clipOvalSendMessage = ClipOval(
+      child: Material(
+        color: Colors.indigo[900],
+        child: InkWell(
+          splashColor: Colors.white54,
+          child: SizedBox(
+            width: 56,
+            height: 56,
+            child: IconButton(
+              icon: const Icon(
+                Icons.send,
+                color: Colors.white,
+              ),
+              onPressed: _isComposing
+                  ? () {
+                      widget.sendMessage(text: _controller.text);
+                      _reset();
+                    }
+                  : null,
+            ),
+          ),
+        ),
+      ),
+    );
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5),
       child: Row(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 15, bottom: 15),
-            child: IconButton(
-              icon: const Icon(Icons.photo, size: 45),
-              onPressed: () async {
-                //selectFileInit
-                final imgFile = await FilePicker.platform.pickFiles();
-                if (imgFile == null) return;
-                setState(() {
-                  pickedFile = imgFile.files.first;
-                });
-                //selectFileEnd
-                uploadFile();
-                //widget.sendMessage(imgFile: imgFile);
-              },
-            ),
-          ),
-          /* IconButton(
-            icon: const Icon(Icons.photo_camera), //
-            onPressed: () async {
-              //buildProgress();
-              /* final File imgFile = await ImagePicker()
-                  .pickImage(source: ImageSource.camera)
-                  .then((imgFile) {
-                if (imgFile == null) return;
-              }) as File; 
-              widget.sendMessage(imgFile: imgFile);*/
-
-              /*  await openCamera();
-              widget.sendMessage(imgFile: pickedFile); */
-            },
-          ), */
+          SendImageWidget(widget: widget),
           Expanded(
-            child: /* TextField(
-              controller: _controller,
-              decoration: const InputDecoration.collapsed(
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.teal)),
-                  hintText: 'Enviar uma Mensagem'),
-              onChanged: (text) {
-                setState(() {
-                  _isComposing = text.isNotEmpty;
-                });
-              },
-              onSubmitted: (text) {
-                widget.sendMessage(text: text);
-                _reset();
-              },
-            ), */
-                Padding(
+            child: Padding(
               padding: const EdgeInsets.only(right: 5, top: 5, bottom: 10),
               child: TextField(
                 textAlign: TextAlign.center,
                 autofocus: false,
                 style: TextStyle(fontSize: 16.0, color: Colors.indigo[900]!),
                 controller: _controller,
-                decoration: InputDecoration(
-                  fillColor: Colors.white24,
-                  filled: true,
-                  /* prefixIcon: Icon(
-                    Icons.message_outlined,
-                    color: Colors.indigo[900]!,
-                  ), */
-                  /* suffixIcon: Icon(
-                    Icons.message_outlined,
-                    color: Colors.indigo[900]!,
-                  ), */
-                  hintText: ('Enviar mensagem'),
-                  contentPadding: const EdgeInsets.all(17),
-                  suffixStyle: const TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.indigo[900]!),
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.indigo[900]!),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.indigo[900]!),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
+                decoration: inputDecorationEnviarMensagem,
                 onChanged: (text) {
                   setState(() {
                     _isComposing = text.isNotEmpty;
@@ -182,91 +133,55 @@ class _TextComposerState extends State<TextComposer> {
               ),
             ),
             //)
-            /* Column(
-              children: [
-                if (teste != null) ...[
-                  TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration.collapsed(
-                        hintText: 'Enviar uma Mensagem'),
-                    onChanged: (text) {
-                      setState(() {
-                        _isComposing = text.isNotEmpty;
-                      });
-                    },
-                    onSubmitted: (text) {
-                      widget.sendMessage(text: text);
-                      _reset();
-                    },
-                  ),
-                ] else if (teste == null) ...[
-                  const TextField(
-                    enabled: false,
-                    decoration: InputDecoration.collapsed(
-                        hintText: 'Faça Login para Enviar uma Mensagem'),
-                  ),
-                ],
-              ],
-            ), */
           ),
-          /* IconButton(
-            icon: const Icon(Icons.photo),
-            onPressed: () async {
-              final File imgFile = await ImagePicker()
-                  .pickImage(source: ImageSource.gallery)
-                  .then((imgFile) {
-                if (imgFile == null) return;
-              }) as File;
-              widget.sendMessage(imgFile: imgFile);
-              /*  await openCamera();
-              widget.sendMessage(imgFile: pickedFile); */
-            },
-          ), */
-
           Padding(
             padding: const EdgeInsets.only(bottom: 5),
-            child: ClipOval(
-              child: Material(
-                color: Colors.indigo[900],
-                child: InkWell(
-                  splashColor: Colors.white54,
-                  child: SizedBox(
-                    width: 56,
-                    height: 56,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.send,
-                        color: Colors.white,
-                      ),
-                      onPressed: _isComposing
-                          ? () {
-                              widget.sendMessage(text: _controller.text);
-                              _reset();
-                            }
-                          : null,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            child: clipOvalSendMessage,
           ),
-
-          /* IconButton(
-            icon: const Icon(Icons.send),
-            onPressed: _isComposing
-                ? () {
-                    widget.sendMessage(text: _controller.text);
-                    _reset();
-                  }
-                : null,
-          ), */
         ],
       ),
     );
   }
 }
 
-//Widget buildProgress() => StreamBuilder<TaskSnapshot>(
+class SendImageWidget extends StatelessWidget {
+  const SendImageWidget({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final TextComposer widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 15, bottom: 15),
+      child: IconButton(
+        icon: const Icon(Icons.photo, size: 45),
+        onPressed: () async {
+          /* ////
+          final imgFile = await FilePicker.platform.pickFiles();
+          if (imgFile == null) return;
+          setState(() {
+            pickedFile = imgFile.files.first;
+          });
+          uploadFile();
+          widget.sendMessage(imgFile: imgFile as XFile);
+          //// */
+
+          final ImagePicker picker = ImagePicker();
+          XFile? imgFile = await picker.pickImage(source: ImageSource.gallery);
+          if (kDebugMode) {
+            print('#### imgFile RECUPERADA => $imgFile');
+          }
+          if (imgFile == null) return;
+          widget.sendMessage(imgFile: imgFile as XFile);
+        },
+      ),
+    );
+  }
+}
+
 Widget buildProgress(UploadTask task) => StreamBuilder<TaskSnapshot>(
     stream: task.snapshotEvents,
     builder: (context, snapshot) {
@@ -274,14 +189,14 @@ Widget buildProgress(UploadTask task) => StreamBuilder<TaskSnapshot>(
         final data = snapshot.data!;
         double progress = data.bytesTransferred / data.totalBytes;
         return SizedBox(
-            height: 50,
+            height: 100,
             child: Stack(
               fit: StackFit.expand,
               children: [
                 LinearProgressIndicator(
                   value: progress,
-                  backgroundColor: Colors.grey,
-                  color: Colors.green,
+                  backgroundColor: Colors.white,
+                  color: Colors.blue,
                 ),
                 Center(
                     child: Text(
@@ -294,21 +209,3 @@ Widget buildProgress(UploadTask task) => StreamBuilder<TaskSnapshot>(
         return const SizedBox(height: 50);
       }
     });
-
-/* Future<XFile?> openCamera() async {
-/*   File _image;
-  final picker = ImagePicker(); */
-
-  final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
-  //print('PickedFile: ${pickedFile.toString()}');
-  if (pickedFile == null) {
-    return null;
-  }
-  return pickedFile;
-/*     setState(() {
-      _image = File(pickedFile.path); // Exception occurred here
-    }); */
-  /*    if (_image != null) {
-      return _image;
-    } */
-} */

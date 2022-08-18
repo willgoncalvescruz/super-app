@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:super_app/screens/chat_online/chat_message.dart';
 import 'package:super_app/screens/chat_online/text_composer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,6 +24,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   User? _currentUser;
   bool _isLoading = false;
+
+  List<Reference> refs = [];
+  List<String> arquivos = [];
+  bool loading = true;
+  bool uploading = false;
+  double total = 0;
 
   @override
   void initState() {
@@ -50,11 +57,9 @@ class _ChatScreenState extends State<ChatScreen> {
         accessToken: googleSignInAuthentication.accessToken,
       );
 
-//      final AuthResult authResult =
       final UserCredential authResult =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      //final FirebaseUser user = authResult.user;
       final User user = authResult.user!;
       return user;
     } catch (error) {
@@ -62,11 +67,10 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _sendMessage({String? text, File? imgFile}) async {
+  void _sendMessage({String? text, XFile? imgFile}) async {
     final User? user = await _getUser();
 
     if (user == null) {
-//      _scaffoldKey.currentState.showSnackBar(SnackBar(
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Faça seu login e Tente novamente!',
             textAlign: TextAlign.center),
@@ -81,66 +85,55 @@ class _ChatScreenState extends State<ChatScreen> {
       "senderPhotoUrl": user.photoURL,
       "time": Timestamp.now(),
     };
-    /* Future uploadFile() async {
-      PlatformFile? pickedFile;
-      UploadTask? uploadTask;
-      final path =
-          'files/${pickedFile!.name + DateTime.now().millisecondsSinceEpoch.toString()}';
-      final file = File(pickedFile.path!);
-      //child(user.uid + DateTime.now().millisecondsSinceEpoch.toString())
-      final ref = FirebaseStorage.instance.ref().child(path);
-      setState(() {
-        uploadTask = ref.putFile(file);
-      });
 
-      final snapshot = await uploadTask!.whenComplete(() {});
-      final urlDownload = await snapshot.ref.getDownloadURL();
-      data['imgUrl'] = urlDownload;
-      if (kDebugMode) {
-        print('#####Dowload Link: => $urlDownload');
-      }
-      setState(() {
-        uploadTask = null;
-      });
-    } */
-
+    //###################################################################//
     if (imgFile != null) {
-      //uploadFile();
-      //StorageUploadTask
-      //UploadTask task = FirebaseStorage.instance.ref().child(user.uid + DateTime.now().millisecondsSinceEpoch.toString()).putFile(imgFile);
-      /*      PlatformFile? pickedFile;
-      UploadTask? uploadTask; */
+      XFile? file = await getImage();
+      if (file != null) {
+        UploadTask task = await upload(file.path);
 
-      // upload
-/* 
-      PlatformFile? pickedFile;
-      UploadTask? uploadTask;
-      final path =
-          'files/${pickedFile!.name + DateTime.now().millisecondsSinceEpoch.toString()}';
-      final file = File(pickedFile.path!);
-      //child(user.uid + DateTime.now().millisecondsSinceEpoch.toString())
-      final ref = FirebaseStorage.instance.ref().child(path);
-      setState(() {
-        uploadTask = ref.putFile(file);
-      });
-
-      final snapshot = await uploadTask!.whenComplete(() {});
-      final urlDownload = await snapshot.ref.getDownloadURL();
-      data['imgUrl'] = urlDownload;
-      if (kDebugMode) {
-        print('#####Dowload Link: => $urlDownload');
+        task.snapshotEvents.listen(
+          (TaskSnapshot snapshot) async {
+            if (snapshot.state == TaskState.running) {
+              setState(() {
+                _isLoading = true;
+                total = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              });
+            } else if (snapshot.state == TaskState.success) {
+              final photoRef = snapshot.ref;
+              arquivos.add(await photoRef.getDownloadURL());
+              refs.add(photoRef);
+              String url = await photoRef.getDownloadURL();
+              data['imgUrl'] = url;
+              if (kDebugMode) {
+                print('#### data[\'imgUrl\'] = url => $url');
+              }
+              setState(() => _isLoading = false);
+            }
+          },
+        );
       }
-      setState(() {
-        uploadTask = null;
-      }); */
-      // upload
-
     }
 
-    //if (text != null) data['text'] = text;
-    data['text'] = text;
-
+    if (text != null) data['text'] = text;
+    //data['text'] = text;
     FirebaseFirestore.instance.collection('messages').add(data);
+    //###################################################################//
+
+    /*       //StorageUploadTask
+    //UploadTask task = FirebaseStorage.instance.ref().child(user.uid + DateTime.now().millisecondsSinceEpoch.toString()).putFile(imgFile);
+      setState(() {
+        _isLoading = true;
+      });
+
+     //TaskSnapshot taskSnapshot = task.snapshot;
+      StorageTaskSnapshot taskSnapshot = await task.onComplete;
+      String url = await taskSnapshot.ref.getDownloadURL();
+      data['imgUrl'] = url;
+
+      setState(() {
+        _isLoading = false;
+      }); */
   }
 
   void _loginUser() async {
@@ -150,7 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Faça seu login e Tente novamente!',
             textAlign: TextAlign.center),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.orange,
         //duration: Duration(seconds: 3),
       ));
     } else {
@@ -184,24 +177,30 @@ class _ChatScreenState extends State<ChatScreen> {
                     _loginUser();
                   },
                 )
-              : Container(),
+              : IconButton(
+                  icon: const Icon(Icons.logout_outlined),
+                  tooltip: 'Fazer logout', //exit_to_app
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                    googleSignIn.signOut();
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Você saiu da conta Google!',
+                          textAlign: TextAlign.center),
+                    ));
+                  },
+                ),
           centerTitle: true,
           elevation: 0,
           actions: <Widget>[
             _currentUser != null
                 ? IconButton(
-                    icon: const Icon(Icons.logout_outlined), //exit_to_app
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                      googleSignIn.signOut();
-                      //_scaffoldKey.currentState.showSnackBar(SnackBar(
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Você saiu da conta Google!',
-                            textAlign: TextAlign.center),
-                      ));
-                    },
-                  )
-                : Container()
+                    icon: const Icon(Icons.wifi_rounded),
+                    tooltip: 'Você está Online',
+                    onPressed: () {})
+                : IconButton(
+                    icon: const Icon(Icons.wifi_off_rounded),
+                    tooltip: 'Você está Offline',
+                    onPressed: () {}),
           ],
         ),
         body: Container(
@@ -255,5 +254,42 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+}
+
+Future<XFile?> getImage() async {
+  final ImagePicker picker = ImagePicker();
+  XFile? image = await picker.pickImage(source: ImageSource.gallery);
+  if (kDebugMode) {
+    print('#### 1 getImage => $image');
+  }
+  return image;
+}
+
+Future<UploadTask> upload(String path) async {
+  File file = File(path);
+  PlatformFile? pickedFile;
+  try {
+    String ref =
+        'files/img-${DateTime.now().millisecondsSinceEpoch.toString()}.jpeg';
+    /* String ref =
+        'files/img-${pickedFile!.name + DateTime.now().millisecondsSinceEpoch.toString()}.png';
+ */
+    final storageRef = FirebaseStorage.instance.ref();
+    if (kDebugMode) {
+      print('#### 2 upload => $ref');
+    }
+    return storageRef.child(ref).putFile(
+          file,
+          SettableMetadata(
+            cacheControl: "public, max-age=300",
+            contentType: "image/jpg",
+            customMetadata: {
+              "user": "123",
+            },
+          ),
+        );
+  } on FirebaseException catch (e) {
+    throw Exception('Erro no upload: ${e.code}');
   }
 }

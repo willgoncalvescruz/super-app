@@ -48,7 +48,7 @@ class ChatMessage extends StatelessWidget {
                   data['imgUrl'] != null
                       ? Image.network(
                           data['imgUrl'],
-                          width: 250,
+                          width: 150,
                         )
                       : Text(
                           data['text'] ?? "",
