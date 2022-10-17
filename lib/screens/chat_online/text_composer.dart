@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +8,7 @@ import 'package:super_app/screens/chat_online/chat_screen.dart';
 class TextComposer extends StatefulWidget {
   const TextComposer(this.sendMessage, {Key? key}) : super(key: key);
 
-  final Function({String? text, XFile? imgFile}) sendMessage;
+  final Function({String? text, bool isLiked, XFile? imgFile}) sendMessage;
 
   @override
   _TextComposerState createState() => _TextComposerState();
@@ -107,6 +106,7 @@ class _TextComposerState extends State<TextComposer> {
       ),
     );
     return Container(
+      color: Colors.transparent,
       margin: const EdgeInsets.symmetric(horizontal: 5),
       child: Row(
         children: <Widget>[
@@ -127,6 +127,7 @@ class _TextComposerState extends State<TextComposer> {
                 },
                 onSubmitted: (text) {
                   widget.sendMessage(text: text);
+                  //widget.sendMessage(text: imgFile;
                   //if (pickedFile != null) Center(child: Text(pickedFile!.name));
                   _reset();
                 },
@@ -175,7 +176,7 @@ class SendImageWidget extends StatelessWidget {
             print('#### imgFile RECUPERADA => $imgFile');
           }
           if (imgFile == null) return;
-          widget.sendMessage(imgFile: imgFile as XFile);
+          widget.sendMessage(imgFile: imgFile);
         },
       ),
     );

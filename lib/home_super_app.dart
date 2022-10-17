@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:super_app/screens/agenda_contatos/ui/agendacontato.dart';
-import 'package:super_app/screens/buscadorgifs.dart';
+import 'package:super_app/screens/buscador_gifs/buscadorgifs.dart';
 import 'package:super_app/screens/chat_diego_antunes/chat_main.dart';
 import 'package:super_app/screens/chat_online/chat_online.dart';
-import 'package:super_app/screens/conversor.dart';
-import 'package:super_app/screens/imc.dart';
-import 'package:super_app/screens/lista.dart';
-import 'package:super_app/screens/testeresponsivo.dart';
+import 'package:super_app/screens/conversor/conversor.dart';
+import 'package:super_app/screens/imc/imc.dart';
+import 'package:super_app/screens/lista/lista.dart';
+import 'package:super_app/screens/loja_virtual/loja_virtual.dart';
+//import 'package:super_app/screens/testeresponsivo.dart';
+
+//import 'screens/loja_virtual/loja_virtual.dart';
 
 class HomeSuperApps extends StatelessWidget {
   const HomeSuperApps({Key? key}) : super(key: key);
@@ -30,7 +33,8 @@ class HomeSuperApps extends StatelessWidget {
             const SplashScreenHomeAgendaContatos(),
         '/SplashScreenHomeChatOnline': (context) =>
             const SplashScreenHomeChatOnline(),
-        '/TesteResponsivo': (context) => App(),
+        '/UploadDeImagensStorage': (context) => UploadDeImagensStorage(),
+        '/LojaVirtual': (context) => const LojaVirtual(),
         //'/TesteResponsivo': (context) => const TesteResponsivo(),
       },
     );
@@ -76,8 +80,10 @@ class MyHomePageState extends State<MyHomePage> {
         '/SplashScreenHomeAgendaContatos', 'assets/images/contato.png'),
     FeatureTestItem('App-Chat Online', '6', '/SplashScreenHomeChatOnline',
         'assets/images/chatonline.png'),
-    FeatureTestItem('App-Teste Responsividade', '7', '/TesteResponsivo',
-        'assets/images/apps.png'),
+    FeatureTestItem('App-Upload-de-Imagens-Storage', '7',
+        '/UploadDeImagensStorage', 'assets/images/upload.png'),
+    FeatureTestItem(
+        'App-Loja-Virtual', '8', '/LojaVirtual', 'assets/images/loja.png'),
   ];
 
   @override

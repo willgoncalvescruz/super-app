@@ -22,8 +22,8 @@ class _StoragePageState extends State<StoragePage> {
   double total = 0;
 
   Future<XFile?> getImage() async {
-    final ImagePicker _picker = ImagePicker();
-    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
     return image;
   }
 

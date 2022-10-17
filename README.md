@@ -30,6 +30,7 @@ Achei muito interessante o curso, aborda de forma ampla muitas ferramentas  e te
 - [x] 3 - App - Lista de Tarefas
 - [x] 4 - App - Buscador de GIFs
 - [x] 5 - App - Agenda de Contatos (Banco Firebase - Utilização camera ou Galeria de Imagens...)
+- [x] 6 - App - Loja Virtual
 
 
 ### Rodar

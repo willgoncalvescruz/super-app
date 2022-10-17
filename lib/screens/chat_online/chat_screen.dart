@@ -22,7 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  User? _currentUser;
+  User? currentUser;
   bool _isLoading = false;
 
   List<Reference> refs = [];
@@ -36,14 +36,14 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     FirebaseAuth.instance.authStateChanges().listen((user) {
       setState(() {
-        _currentUser = user;
+        currentUser = user;
       });
     });
   }
 
   Future<User?> _getUser() async {
-    if (_currentUser != null) {
-      return _currentUser;
+    if (currentUser != null) {
+      return currentUser;
     }
 
     try {
@@ -67,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _sendMessage({String? text, XFile? imgFile}) async {
+  void _sendMessage({String? text, isLiked, XFile? imgFile}) async {
     final User? user = await _getUser();
 
     if (user == null) {
@@ -104,18 +104,43 @@ class _ChatScreenState extends State<ChatScreen> {
               arquivos.add(await photoRef.getDownloadURL());
               refs.add(photoRef);
               String url = await photoRef.getDownloadURL();
+              //não deu certo passar o data aqui pois não chega imgUrl do firestore no chat.
               data['imgUrl'] = url;
+              //String urlDownload = url;
               if (kDebugMode) {
-                print('#### data[\'imgUrl\'] = url => $url');
+                print(/* '#### data[\'imgUrl\'] = url =>  */ data['imgUrl']);
+                //data['imgUrl'] = url;
               }
               setState(() => _isLoading = false);
             }
           },
         );
       }
-    }
+      //data['imgUrl'] = url;
+/*       if (kDebugMode) {
+        print(urlDownload);
+      } */
 
+/*       data['imgUrl'] = url;
+      if (kDebugMode) {
+        print("INICIO - data['imgUrl']");
+        print(data['imgUrl']);
+        print("FIM - data['imgUrl']");
+      } */
+    }
     if (text != null) data['text'] = text;
+    data['isLiked'] = false;
+    /*    imgFile != null
+        ? data['imgUrl'] = "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA11Er3V.img?w=82&h=82&q=120&m=6&f=png&u=t"
+        : data['text'] = text; */
+/*     imgFile != null
+        ? data['imgUrl'] = //url
+            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA11Er3V.img?w=82&h=82&q=120&m=6&f=png&u=t" //chumbado trocar por "ulr"
+        : data['text'] = text;
+    data['isLiked'] = isLiked; */
+/*     data['imgUrl'] =
+        "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA11Er3V.img?w=82&h=82&q=120&m=6&f=png&u=t"; */
+
     //data['text'] = text;
     FirebaseFirestore.instance.collection('messages').add(data);
     //###################################################################//
@@ -165,11 +190,11 @@ class _ChatScreenState extends State<ChatScreen> {
         appBar: AppBar(
           backgroundColor: Colors.indigo[900],
           title: Text(
-            _currentUser != null
-                ? 'Olá, ${_currentUser?.displayName} - Online'
+            currentUser != null
+                ? 'Olá, ${currentUser?.displayName} - Online'
                 : 'Chat-App - Offline',
           ),
-          leading: _currentUser == null
+          leading: currentUser == null
               ? IconButton(
                   icon: const Icon(Icons.assignment_ind),
                   tooltip: 'Fazer login com o Google',
@@ -192,7 +217,7 @@ class _ChatScreenState extends State<ChatScreen> {
           centerTitle: true,
           elevation: 0,
           actions: <Widget>[
-            _currentUser != null
+            currentUser != null
                 ? IconButton(
                     icon: const Icon(Icons.wifi_rounded),
                     tooltip: 'Você está Online',
@@ -204,9 +229,8 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         body: Container(
-          //color: Colors.yellow[100],
           decoration: BoxDecoration(
-            color: Colors.blue[100],
+            color: Colors.transparent,
             image: DecorationImage(
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
@@ -216,6 +240,22 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           child: Column(
             children: <Widget>[
+              Container(
+                height: 15,
+                decoration: BoxDecoration(
+                  color: Colors.indigo[900],
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.elliptical(
+                      350,
+                      50.0,
+                    ),
+                    bottomRight: Radius.elliptical(
+                      350,
+                      50.0,
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -240,7 +280,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             itemBuilder: (context, index) {
                               return ChatMessage(
                                 documents[index].data() as Map<String, dynamic>,
-                                documents[index].data() == _currentUser?.uid,
+                                documents[index].data() == currentUser?.uid,
                               );
                             });
                     }
@@ -257,6 +297,18 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
+/* class Todo {
+  final String title;
+  const Todo(this.title);
+}
+
+final todos = List.generate(
+  5,
+  (i) => Todo(
+    'Todo $i',
+  ),
+);
+ */
 Future<XFile?> getImage() async {
   final ImagePicker picker = ImagePicker();
   XFile? image = await picker.pickImage(source: ImageSource.gallery);

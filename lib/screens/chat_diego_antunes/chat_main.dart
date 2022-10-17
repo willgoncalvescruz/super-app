@@ -10,15 +10,15 @@ void main() async {
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
-  runApp(App());
+  runApp(UploadDeImagensStorage());
 }
 
-class App extends StatelessWidget {
+class UploadDeImagensStorage extends StatelessWidget {
   final Future<FirebaseApp> _inicializacao = Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  App({Key? key}) : super(key: key);
+  UploadDeImagensStorage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

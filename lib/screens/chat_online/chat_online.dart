@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 import 'package:super_app/screens/chat_online/chat_screen.dart';
-import 'package:super_app/screens/chat_online/firestore/main_firestore.dart';
 
 class SplashScreenHomeChatOnline extends StatelessWidget {
   const SplashScreenHomeChatOnline({Key? key}) : super(key: key);
