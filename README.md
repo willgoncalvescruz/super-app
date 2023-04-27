@@ -1,6 +1,6 @@
 <h1 align="center">Super-App: </h1>
 <h1 align="center">
-  <img alt="Acessar" title="#Acessar" src="./assets/images/logofull.png" width="200"/></h1>
+  <img alt="Acessar" title="#Acessar" src="./assets/images/logol.png" width="200"/></h1>
 
 <h1 align="center">
     <a href="https://pub.dev/"> Flutter</a></h1>
