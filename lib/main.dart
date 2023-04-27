@@ -16,7 +16,7 @@ void main() async {
   if (kDebugMode) {
     print(await getDataWeather());
   } */
-
+//
   Widget home = SplashScreenView(
     navigateRoute: const HomeSuperApps(),
     duration: 4000,
