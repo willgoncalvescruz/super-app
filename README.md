@@ -44,13 +44,15 @@ Achei muito interessante o curso, aborda de forma ampla muitas ferramentas  e te
 
 ### Telas
 <h1 align="center">
-  <img alt="Splash" title="#Acessar" src="./assets/images/splash.png" width="200"/>
-  <img alt="Login" title="#Login" src="./assets/images/login.png" width="200"/>
-  <img alt="Cadastro" title="#Cadastro" src="./assets/images/googlesignin.png" width="200"/>
-  <img alt="Boletos" title="#Produtos" src="./assets/images/meusboletos.png" width="200"/>
-  <img alt="Scanner" title="#Adcionar" src="./assets/images/scanner.png" width="200"/>
-  <img alt="Scanner" title="#Adcionar" src="./assets/images/scannertimeout.png" width="200"/>
-  <img alt="Digitar Código" title="#Carrinho" src="./assets/images/digitarcodigo1.png" width="200"/>
+<img alt="Home" title="#Home" src="./assets/images/0.png" width="200"/>
+  <img alt="Imc" title="#Imc" src="./assets/images/1.png" width="200"/>
+  <img alt="Conversor" title="#Conversor" src="./assets/images/2.png" width="200"/>
+  <img alt="Lista" title="#Lista" src="./assets/images/3.png" width="200"/>
+  <img alt="Buscador" title="#Buscador" src="./assets/images/4.png" width="200"/>
+  <img alt="Agenda" title="#Agenda" src="./assets/images/5.png" width="200"/>
+  <img alt="Chat" title="#Chat" src="./assets/images/6.png" width="200"/>
+  <img alt="Upload" title="#Upload" src="./assets/images/7.png" width="200"/>
+  <img alt="Loja" title="#Loja" src="./assets/images/8.png" width="200"/>
 </h1>
 
 ### Referencias
